@@ -1,2 +1,2 @@
 # brix-animation
-brix声明式动画
+brix声明式动画.
