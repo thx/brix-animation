@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <!-- Include RequireJS -->
+    <script src="../bower_components/requirejs/require.js"></script>
+    <script type="text/javascript">
+        require.config({
+            paths: {
+                'brix/animation': '../src/animation',
+                jquery: '../bower_components/jquery/dist/jquery',
+                promise: '../bower_components/promise/promise',
+                underscore: '../bower_components/underscore/underscore'
+            }
+        })
+    </script>
+    <link rel="stylesheet" href="../bower_components/animate.css/animate.css">
+    <style>
+    .box {
+      width: 300px;
+      height: 50px;
+      line-height: 50px;
+      background-color: black;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+    }
+    </style>
+
+  </head>
+  <body>
+
+    <div class="box animated" bx-animation="on:click;class:swing">
+      animation: trigger by click
+    </div>
+
+    <script>
+      require([
+        'brix/animation',
+        'jquery',
+        'underscore'
+      ], function(Anim, $, _) {
+        Anim()
+      })
+    </script>
+  </body>
+</html>
