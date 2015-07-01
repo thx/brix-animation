@@ -22,7 +22,7 @@ define([
   /**
    * 解析bx-animation配置
    * 规则：
-   *   - 逗号分隔
+   *   - 分号分隔
    * @param  {string} configString 节点上的bx-animation字符串配置
    * @return {object}              返回对象类型配置
    */
@@ -53,12 +53,16 @@ define([
    */
   var configFunctions = {
     'on': function(node, event, i, callback) {
+      // var deferred = $.Deferred()
+
       $(node).on(event, function() {
-        callback(i)
-      })
+          // deferred.resolve(i)
+          callback(i)
+        })
+        // return deferred.promise()
     },
 
-    'class': function(node, className, callback) {
+    'class': function(node, className, i, callback) {
       $(node).addClass(className)
       setTimeout(function() {
         $(node).removeClass(className)
