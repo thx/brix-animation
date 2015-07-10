@@ -4,18 +4,30 @@ define([
   'promise'
 ], function($, _, Promise) {
 
+  /**
+   * [Animation description]
+   */
   function Animation() {
 
-    //所有的带bx-animation的节点
-    var allAnimNode = $('[bx-animation]')
+  }
 
-    _.each(allAnimNode, function(node, i) {
+  /**
+   * Animation的所有方法
+   * @type {Object}
+   */
+  Animation.prototype = {
+    //启动
+    boot: function() {
+      //所有的带bx-animation的节点
+      var allAnimNode = $('[bx-animation]')
 
-      //解析bx-animation配置
-      parseConfig(node)
+      _.each(allAnimNode, function(node, i) {
 
-    })
+        //解析bx-animation配置
+        parseConfig(node)
 
+      })
+    }
   }
 
 
@@ -63,10 +75,13 @@ define([
     },
 
     'class': function(node, className, i, callback) {
-      $(node).addClass(className)
-      setTimeout(function() {
-        $(node).removeClass(className)
-      }, 1000)
+      node = $(node)
+      node.addClass(className)
+
+      //动画结束
+      node.on('animationend', function() {
+        node.removeClass(className)
+      })
     }
   }
 

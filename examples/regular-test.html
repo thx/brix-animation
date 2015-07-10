@@ -1,0 +1,60 @@
+<html>
+<head>
+
+</head>
+<body>
+  <style>
+  .box{
+    width: 400px;
+    height:100px;
+    background-color: #333;
+    text-align: center;
+    font-size: 20px;
+    color: #fff;
+    line-height: 100px;
+    margin: 10px;
+   cursor: pointer;
+  display: inline-block;
+}
+body{
+    padding: 20px;
+}
+  </style>
+
+
+<!-- container -->
+<div id="app"></div>
+
+<script type="template/regular" id="animate">
+
+ <div class='box animated' r-animation=
+     "on: click;
+        class: swing ;
+        emit: swing-over ;
+        class: shake;
+        emit: shake-over"
+        >
+  box1: trigger by click
+</div>
+
+<div class='box animated' r-animation=
+     "on:click;class: fadeIn,
+      ">box2: after box1 swing</div>
+
+
+</script>
+
+
+<link rel="stylesheet" href="../bower_components/animate.css/animate.css" />
+<script src="regular.js"></script>
+<script>
+  var Component = Regular.extend({
+    template: "#animate"
+})
+
+var component = new Component().$inject("#app");
+
+</script>
+</body>
+
+</html>

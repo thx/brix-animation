@@ -32,13 +32,23 @@
       animation: trigger by click
     </div>
 
+    <div style="width:200px;background:red;position:relative;" id="SomeElementYouWantToAnimate">...</div>
+
     <script>
       require([
         'brix/animation',
         'jquery',
         'underscore'
       ], function(Anim, $, _) {
-        Anim()
+        var options = {} //配置
+        var anim = new Anim(options)
+
+        anim.boot() //启动
+
+        $('.box').bind('animationend', function(e) {
+          debugger
+        })
+
       })
     </script>
   </body>
