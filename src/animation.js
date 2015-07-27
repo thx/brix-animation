@@ -8,7 +8,10 @@ define([
    * [Animation description]
    */
   function Animation() {
-    // 内建的动画命令，可以this.register(name, fn)扩展之
+    /**
+     * 内建的动画命令，可以this.register(name, fn)扩展之
+     * @type {Object}
+     */
     this.builtinCommands = {}
   }
 
@@ -17,7 +20,10 @@ define([
    * @type {Object}
    */
   Animation.prototype = {
-    //启动
+    /**
+     * 启动
+     * @return {[type]} [description]
+     */
     boot: function() {
       var self = this
 
@@ -38,9 +44,14 @@ define([
 
     /**
      * 注册自定义的命令
-     * @param  {[type]}   name [description]
-     * @param  {Function} fn   [description]
-     * @return {[type]}        [description]
+     * @param  {[type]}   name 命令名称
+     * @param  {Function} fn   命令函数体
+     *  function (step) {}
+     *      step {object}
+     *          step.node //当前节点
+     *          step.index //命令的index
+     *          step.param //命令的参数
+     *          step.done //执行完命令后的回调函数
      */
     register: function(name, fn) {
       this.builtinCommands[name] = fn
@@ -99,11 +110,10 @@ define([
 
 
   /**
-   * 解析bx-animation配置
+   * 解析bx-animation配置，挨个执行命令
    * 规则：
    *   - 分号分隔
-   * @param  {string} configString 节点上的bx-animation字符串配置
-   * @return {object}              返回对象类型配置
+   * @param  {dom} node 当前节点
    */
   function initAnimation(node) {
     var self = this
