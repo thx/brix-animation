@@ -16,6 +16,9 @@
    cursor: pointer;
   display: inline-block;
 }
+.box.animated{
+   transition:  color 1s linear;
+}
 body{
     padding: 20px;
 }
@@ -26,6 +29,14 @@ body{
 <div id="app"></div>
 
 <script type="template/regular" id="animate">
+
+<div class='box animated' r-animation=
+     "on: click;
+        class:  swing;
+        style: color #333;
+        class: bounceOut;
+        style: display none;
+      ">style: click me </div>
 
  <div class='box animated' r-animation=
      "on: click;

@@ -708,7 +708,7 @@
       // simple accessor get
       _sg_: function(path, defaults, ext) {
         if (typeof ext !== 'undefined') {
-          // if(path === "demos")  debugger
+          // if(path === "demos")
           var computed = this.computed,
             computedProperty = computed[path];
           if (computedProperty) {
@@ -4899,6 +4899,7 @@
 
 
     function createSeed(type) {
+      debugger
 
       var steps = [],
         current = 0,
