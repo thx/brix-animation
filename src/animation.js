@@ -136,6 +136,7 @@ define([
       var command = commands[i]
       var commandName = command.split(':')[0]
       var commandValue = command.split(':')[1]
+
       //
       var step = {
         node: node,
@@ -148,12 +149,14 @@ define([
         }
       }
 
-      if (!self.builtinCommands[commandName]) {
+      var builtinCommand = self.builtinCommands[commandName]
+      if (!builtinCommand) { // 未定义的命令抛错
         throw commandName + ' 该命令未定义'
         return
       }
 
-      self.builtinCommands[commandName](step)
+      //执行命令代码
+      builtinCommand(step)
 
     }(0))
   }
