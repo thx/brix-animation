@@ -51,7 +51,7 @@ define([
      *          step.node //当前节点
      *          step.index //命令的index
      *          step.param //命令的参数
-     *          step.done //执行完命令后的回调函数
+     *          step.done //执行完命令后的回调函数，会顺序调用接下来的命令
      */
     register: function(name, fn) {
       this.builtinCommands[name] = fn
