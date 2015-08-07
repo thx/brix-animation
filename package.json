@@ -1,0 +1,18 @@
+{
+  "name": "brix-animation",
+  "description": "brix-animation",
+  "version": "0.0.1",
+  "homepage": "https://github.com/chongzhi/brix-animation",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-less": ""
+  },
+  "peerDependencies": {},
+  "keywords": [
+    "brix-animation"
+  ]
+}

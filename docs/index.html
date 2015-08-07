@@ -18,19 +18,42 @@
   </head>
   <body>
 
-    <div class="box animated" bx-animation="on:click;class:swing;class:wobble">
-      animation: trigger by click swing
+  <header>
+    <h1>Brix - Animation</h1>
+    <p>Easily, Flexible, Strong, Configurable Animation</p>
+  </header>
+
+
+  <section>
+    <div class="demo">
+      <!-- <h4>Demos: </h4> -->
+      <dl class="demo-list">
+        <dt>自动执行动画</dt>
+        <dd>
+          <div class="box animated" bx-animation="class:swing;wait:1000;class:shake;class:tada;removeClass:box">
+            animation: automatic execute
+          </div>
+        </dd>
+
+        <dt>点击触发</dt>
+        <dd>
+          <div class="box animated" bx-animation="on:click;class:swing;class:wobble">
+            animation: trigger by click
+          </div>
+        </dd>
+
+        <dt>鼠标经过触发</dt>
+        <dd>
+          <div class="box animated" bx-animation="on:mouseenter;class:swing;wait:1000;class:shake;class:tada">
+            animation: trigger by mouseenter
+          </div>
+        </dd>
+      </dl>
+
     </div>
 
-    <div class="box animated" bx-animation="on:mouseenter;class:swing;wait:1000;class:shake;class:tada">
-      animation: trigger by click shake
-    </div>
+  </section>
 
-     <div class="box animated" bx-animation="class:swing;wait:1000;class:shake;class:tada;removeClass:box">
-      animation: trigger by click shake
-    </div>
-
-    <!-- <div style="width:200px;background:red;position:relative;" id="SomeElementYouWantToAnimate">...</div> -->
 
     <script>
       require([
