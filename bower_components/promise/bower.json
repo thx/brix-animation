@@ -1,0 +1,15 @@
+{
+  "name": "promise",
+  "version": "0.2.1",
+  "main": "promise.js",
+  "ignore": [
+    "tests",
+    "node_modules",
+    "**/.*",
+    "**/*.json",
+    "**/*.html",
+    "**/*.md"
+  ],
+  "dependencies": {},
+  "devDependencies": {}
+}
