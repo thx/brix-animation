@@ -28,20 +28,21 @@
   <section>
 
 
-
     <div class="demo">
+
+      <div style="margin-bottom:40px;">
+        <div style="margin-bottom:10px;">典型配置：</div>
+        <code>
+          &#60;div class="box animated" bx-animation="on:click;class:swing;wait:500;class:wobble"&#62;&#60;/div&#62;
+         </code>
+      </div>
+
       <!-- <h4>Demos: </h4> -->
       <dl class="demo-list">
-        <dt>自动执行动画</dt>
-        <dd>
-          <div class="box animated" bx-animation="class:swing;wait:1000;class:shake;class:tada">
-            animation: automatic execute
-          </div>
-        </dd>
 
         <dt>点击触发</dt>
         <dd>
-          <div class="box animated" bx-animation="on:click;class:swing;class:wobble;remove:box">
+          <div class="box animated" bx-animation="on:click;class:swing;wait:500;class:wobble;removeClass:animated">
             animation: trigger by click
           </div>
         </dd>
@@ -50,6 +51,13 @@
         <dd>
           <div class="box animated" bx-animation="on:mouseenter;class:swing;wait:1000;class:shake;class:tada">
             animation: trigger by mouseenter
+          </div>
+        </dd>
+
+        <dt>自动执行动画</dt>
+        <dd>
+          <div class="box animated" bx-animation="class:swing;wait:1000;class:shake;class:tada">
+            animation: automatic execute
           </div>
         </dd>
       </dl>
@@ -76,15 +84,14 @@
         var anim = new Anim(options)
 
         //自定义扩展命令
+        // anim.register('remove', function(step) {
+        //   var node = step.node
+        //   var duration = step.param
+        //   var done = step.done
 
-        anim.register('remove', function(step) {
-          var node = step.node
-          var duration = step.param
-          var done = step.done
-
-          node.removeClass(step.param)
-          done()
-        })
+        //   node.removeClass(step.param)
+        //   done()
+        // })
 
         anim.boot() //启动
 

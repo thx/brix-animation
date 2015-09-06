@@ -12,7 +12,6 @@ a {
 .nav {
   overflow: hidden;
   text-align: center;
-  /*background-color: #f5f5f5;*/
 }
 .nav a {
   display: inline-block;
@@ -53,6 +52,13 @@ header {
   font-family: 'optima';
   font-size: 18px;
   color: white;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #C7254E;
+  background-color: #F9F2F4;
+  border-radius: 4px;
 }
 section {
   width: 960px;

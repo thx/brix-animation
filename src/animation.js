@@ -65,8 +65,10 @@ define([
   function registerBuiltinCommand() {
     var self = this
 
-    // dom事件触发
-    // on事件同类型只能出现一次
+    /**
+     * dom事件触发
+     * on事件同类型只能出现一次
+     */
     self.register('on', function(step) {
       var eventType = step.param
       var node = step.node
@@ -77,7 +79,9 @@ define([
       })
     })
 
-    // 加css3动画类
+    /**
+     * 添加样式
+     */
     self.register('class', function(step) {
       var param = step.param
       var node = step.node
@@ -86,16 +90,17 @@ define([
       var mode = param.split(',')[1]
 
       node.addClass(className)
-
-      node.off('animationend') //防止重复添加事件
-      //动画结束
-      node.on('animationend', function() {
+      node.off('animationend.bxAnimation') //防止重复添加事件
+        //动画结束
+      node.on('animationend.bxAnimation', function() {
         node.removeClass(className)
         done()
       })
     })
 
-    //延迟
+    /**
+     * 延迟等待
+     */
     self.register('wait', function(step) {
       var node = step.node
       var duration = step.param
@@ -104,6 +109,18 @@ define([
       setTimeout(function() {
         done()
       }, duration)
+    })
+
+    /**
+     * 移除样式
+     */
+    self.register('removeClass', function(step) {
+      var node = step.node
+      var className = step.param
+      var done = step.done
+
+      node.removeClass(className)
+      done()
     })
 
   }
