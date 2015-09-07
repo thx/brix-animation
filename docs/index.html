@@ -21,7 +21,8 @@
 
   <header>
     <h1>Brix - animation</h1>
-    <p>Easily, Flexible, Strong, Configurable animation</p>
+    <p>纯声明式、可扩展性动画系统</p>
+    <!-- <p>Easily, Flexible, Strong, Configurable animation</p> -->
   </header>
 
 
@@ -83,15 +84,15 @@
         var options = {} //配置
         var anim = new Anim(options)
 
-        //自定义扩展命令
-        // anim.register('remove', function(step) {
-        //   var node = step.node
-        //   var duration = step.param
-        //   var done = step.done
+        //自定义扩展命令: 移除样式
+        anim.register('removeClass', function(step) {
+          var node = step.node
+          var className = step.param
+          var done = step.done
 
-        //   node.removeClass(step.param)
-        //   done()
-        // })
+          node.removeClass(className)
+          done() //结束执行done
+        })
 
         anim.boot() //启动
 
