@@ -123,6 +123,32 @@ define([
       done()
     })
 
+    /**
+     * 增加内联样式
+     */
+    self.register('style', function(step) {
+      var node = step.node
+      var done = step.done
+      var pairs = step.param.split(',')
+      var styles = []
+
+      //支持多个内联样式，逗号分隔
+      //exp: color red, display none;
+      _.each(pairs, function(pair, i) {
+        pair = $.trim(pair)
+        var tmp = pair.split(/\s+/)
+        styles.push({
+          name: tmp.shift(),
+          value: tmp.join(' ')
+        })
+      })
+
+      _.each(styles, function(style, i) {
+        node.css(style.name, style.value)
+      })
+      done()
+    })
+
   }
 
 
@@ -136,7 +162,7 @@ define([
     var self = this
     var commands = node.attr('bx-animation').split(';'); //分号分隔每条命令
 
-    //兼容;结尾
+    //去掉;结尾导致数组多余的一个空值
     if ($.trim(commands[commands.length - 1]) === '') {
       commands.pop()
     }
@@ -150,16 +176,16 @@ define([
       }
 
       //冒号分隔命令名与命令的参数
-      var command = commands[i]
-      var commandName = command.split(':')[0]
-      var commandValue = command.split(':')[1]
+      var command = $.trim(commands[i]) //trim处理下前后空格
+      var commandName = $.trim(command.split(':')[0])
+      var commandValue = $.trim(command.split(':')[1])
 
-      //
+      //每个命令执行时的参数
       var step = {
-        node: node,
-        index: i,
-        param: commandValue,
-        done: function(index) {
+        node: node, //当前动画的节点
+        index: i, //动画序列
+        param: commandValue, //动画参数
+        done: function(index) { //命令完成时调用done，来告诉系统执行下一个命令
           var _i = index || i // on事件时，重设 i 的值
 
           callee(++_i) //执行下一个命令

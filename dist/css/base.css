@@ -1,13 +1,26 @@
 body {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   background-color: #fafafa;
-  color: #000;
+  color: #333;
+  font-family: 'Source Code Pro', Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 a {
   color: green;
   text-decoration: none;
+}
+pre {
+  font-family: 'Source Code Pro', Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  background-color: #fafafa;
+  padding: 10px;
+}
+pre.code {
+  /*background-color: #f5f5f5;*/
+  /*padding: 10px;*/
+}
+.comments {
+  color: #999;
 }
 .nav {
   overflow: hidden;
@@ -44,6 +57,8 @@ h5 {
   cursor: pointer;
   margin: 0 auto;
   border-radius: 5px;
+  position: relative;
+  left: 0;
 }
 header {
   text-align: center;
@@ -63,26 +78,47 @@ header p {
 }
 code {
   padding: 2px 4px;
-  font-size: 90%;
+  font-size: 100%;
   color: #C7254E;
   background-color: #F9F2F4;
   border-radius: 4px;
+  font-family: 'Source Code Pro', Monaco, courier, monospace;
 }
 section {
-  padding-top: 166px;
-  width: 960px;
+  padding: 166px 50px 50px;
+  width: 860px;
   /*padding: 0 30px;*/
   margin: 0 auto;
   background-color: white;
-  min-height: 800px;
+  /*min-height: 800px;*/
 }
 .demo {
+  /*padding: 20px 0;*/
+}
+.demo-list {
   text-align: center;
-  padding: 50px 0;
 }
 .demo-list dd {
   margin-bottom: 40px;
 }
 .demo-list dt {
   margin-bottom: 10px;
+}
+.mc-anim-link {
+  position: absolute;
+  left: -90px;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 100px 60px 10px;
+  top: -70px;
+  color: white;
+  /*background-color: white;*/
+  transform: rotate(-45deg);
+  /*box-shadow: 0 3px 3px rgba(0,0,0,0.1)*/
+}
+.tips {
+  margin: 40px 0 20px;
+  border-left: 4px solid #4CA26F;
+  padding: 3px 10px;
+  font-weight: bold;
+  text-align: left;
 }

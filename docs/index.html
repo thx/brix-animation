@@ -22,6 +22,7 @@
   <header>
     <h1>Brix - animation</h1>
     <p>纯声明式、可扩展性动画系统</p>
+    <a class="mc-anim-link" href="http://groups.alidemo.cn/thx/minecraft-animation/src/index.html">MineCraft <br>Animation</a>
     <!-- <p>Easily, Flexible, Strong, Configurable animation</p> -->
   </header>
 
@@ -32,7 +33,7 @@
     <div class="demo">
 
       <div style="margin-bottom:40px;">
-        <div style="margin-bottom:10px;">典型配置：</div>
+        <div class="tips" >典型配置：</div>
         <code>
           &#60;div class="box animated" bx-animation="on:click;class:swing;wait:500;class:wobble"&#62;&#60;/div&#62;
          </code>
@@ -43,7 +44,7 @@
 
         <dt>点击触发</dt>
         <dd>
-          <div class="box animated" bx-animation="on:click;class:swing;wait:500;class:wobble;removeClass:animated">
+          <div class="box animated" bx-animation="on:click;style: transition all 0.5s; class:swing;wait:500;class:shake;class:wobble;style:color yellow, background-color #B93E3E;style: left 100px;">
             animation: trigger by click
           </div>
         </dd>
@@ -62,17 +63,55 @@
           </div>
         </dd>
       </dl>
+
     </div>
 
-    <div style="font-size:12px;text-align:center; margin-bottom:40px;background-color:#fafafa;padding:10px;color:#999">
-      gitlab地址： <a style="color:#999" href="http://gitlab.alibaba-inc.com/thx/brix-animation">http://gitlab.alibaba-inc.com/thx/brix-animation</a>
-    </div>
+<div class="tips">调用方式：</div>
+<pre class="code">
+  require([
+    'brix/animation',
+    'jquery',
+    'underscore'
+  ], function(Anim, $, _) {
+    var options = {} //配置
+    var anim = new Anim(options)
 
-     <div class="nav clearfix">
-      <a href="http://groups.alidemo.cn/thx/minecraft-animation/src/index.html">MineCraft-animation</a>
-    </div>
+    //自定义扩展命令: 移除样式
+    anim.register('removeClass', function(step) {
+      var node = step.node
+      var className = step.param
+      var done = step.done
+
+      node.removeClass(className)
+      done() //结束执行done
+    })
+
+    anim.boot() //启动
+
+  })
+</pre>
+
+    <div class="tips">支持的命令列表：</div>
+
+<pre>
+  on: <span class="comments">//dom事件触发</span>
+  class: <span class="comments">//添加class</span>
+  wait: <span class="comments">//延迟等待</span>
+  removeClass: <span class="comments">//移除样式</span>
+  style: <span class="comments">//添加内联样式</span>
+
+  <span class="comments">------------------</span>
+  未来加入：
+    on/emit: <span class="comments">//触发自定义事件</span>
+    call/when: <span class="comments">//不同节点元素间动画序列控制</span>
+
+</pre>
 
   </section>
+
+   <div style="font-size:12px;text-align:center; margin-top:40px;background-color:#fafafa;padding:10px;color:#999">
+      gitlab地址： <a style="color:#999" href="http://gitlab.alibaba-inc.com/thx/brix-animation">http://gitlab.alibaba-inc.com/thx/brix-animation</a>
+    </div>
 
 
     <script>
