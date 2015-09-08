@@ -76,14 +76,14 @@ header p {
   font-family: tahoma;
   opacity: 0.8;
 }
-code {
+/*code {
   padding: 2px 4px;
   font-size: 100%;
   color: #C7254E;
   background-color: #F9F2F4;
   border-radius: 4px;
   font-family: 'Source Code Pro', Monaco, courier, monospace;
-}
+}*/
 section {
   padding: 166px 50px 50px;
   width: 860px;

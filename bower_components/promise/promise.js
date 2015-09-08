@@ -1,4 +1,5 @@
 (function() {
+
   'use strict';
 
   var Promise = function() {
@@ -34,7 +35,7 @@
     var value;
     var i;
 
-    for (i = 0; i < this.thenTargets.length; ++i) {
+    for (i=0;i<this.thenTargets.length;++i) {
       if (this.fulfilled) {
         callback = this.thenTargets[i].onFulfilled;
         value = this.value;
@@ -50,7 +51,8 @@
           callbackResult = this;
         }
         this.resolve(this.thenTargets[i], callbackResult);
-      } catch (err) {
+      }
+      catch(err) {
         this.thenTargets[i].reject(err);
       }
     }
@@ -69,7 +71,7 @@
     thenResult.onFulfilled = onFulfilled;
     thenResult.onRejected = onRejected;
     this.thenTargets.push(thenResult);
-    setTimeout(this.handleThen.bind(this), 0);
+    setTimeout(this.handleThen.bind(this),0);
     return thenResult;
   };
 
@@ -99,13 +101,5 @@
   }
 
   this.Promise = Promise;
-
-  //amd
-  if (typeof define === "function" && define.amd) {
-    define("promise", [], function() {
-      return Promise;
-    });
-  }
-
 
 }).call(this);

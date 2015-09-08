@@ -2,6 +2,7 @@
   <head>
     <!-- Include RequireJS -->
     <script src="../bower_components/requirejs/require.js"></script>
+    <script src="../bower_components/prism/prism.js"></script>
     <script type="text/javascript">
         require.config({
             paths: {
@@ -13,6 +14,7 @@
         })
     </script>
     <link rel="stylesheet" href="../bower_components/animate.css/animate.css">
+    <link rel="stylesheet" href="../bower_components/prism/themes/prism.css">
     <link rel="stylesheet" href="http://g.assets.daily.taobao.net/thx/minecraft-animation/0.0.1/css/animate.css">
     <link rel="stylesheet" href="../dist/css/base.css">
 
@@ -20,12 +22,11 @@
   <body>
 
   <header>
-    <h1>Brix - animation</h1>
-    <p>纯声明式、可扩展性动画系统</p>
+    <h1>Animation <span style="font-size:50%;font-family:tahoma">for Brix</span> </h1>
+    <p>纯声明式、可扩展的动效系统</p>
     <a class="mc-anim-link" href="http://groups.alidemo.cn/thx/minecraft-animation/src/index.html">MineCraft <br>Animation</a>
     <!-- <p>Easily, Flexible, Strong, Configurable animation</p> -->
   </header>
-
 
   <section>
 
@@ -34,9 +35,7 @@
 
       <div style="margin-bottom:40px;">
         <div class="tips" >典型配置：</div>
-        <code>
-          &#60;div class="box animated" bx-animation="on:click;class:swing;wait:500;class:wobble"&#62;&#60;/div&#62;
-         </code>
+        <pre><code class="language-css">&#60;div class="box animated" bx-animation="on:click;class:swing;wait:500;class:wobble"&#62;&#60;/div&#62;</code></pre>
       </div>
 
       <!-- <h4>Demos: </h4> -->
@@ -67,8 +66,9 @@
     </div>
 
 <div class="tips">调用方式：</div>
-<pre class="code">
-  require([
+<pre>
+  <code class="language-javascript">
+require([
     'brix/animation',
     'jquery',
     'underscore'
@@ -87,8 +87,7 @@
     })
 
     anim.boot() //启动
-
-  })
+  })</code>
 </pre>
 
     <div class="tips">内置的命令列表：</div>
@@ -136,6 +135,7 @@
         anim.boot() //启动
 
       })
+
     </script>
   </body>
 </html>

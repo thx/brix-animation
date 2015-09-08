@@ -20,7 +20,6 @@
     "commit": "16367483673c32eb6bfb12eb347d9fb8f043629e"
   },
   "_source": "git://github.com/dmarcos/promise.git",
-  "_target": "~0.2.2",
-  "_originalSource": "promise",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "promise"
 }
