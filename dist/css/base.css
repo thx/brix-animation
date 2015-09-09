@@ -10,14 +10,11 @@ a {
   color: green;
   text-decoration: none;
 }
-/*pre {
-  font-family: 'Source Code Pro',  Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+pre {
+  font-family: 'Source Code Pro', Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
   background-color: #fafafa;
   padding: 10px;
-  &.code {
-
-  }
-}*/
+}
 .comments {
   color: #999;
 }
