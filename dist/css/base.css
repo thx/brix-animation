@@ -10,15 +10,14 @@ a {
   color: green;
   text-decoration: none;
 }
-pre {
-  font-family: 'Source Code Pro', Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+/*pre {
+  font-family: 'Source Code Pro',  Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
   background-color: #fafafa;
   padding: 10px;
-}
-pre.code {
-  /*background-color: #f5f5f5;*/
-  /*padding: 10px;*/
-}
+  &.code {
+
+  }
+}*/
 .comments {
   color: #999;
 }
@@ -126,4 +125,11 @@ section {
   padding: 3px 10px;
   font-weight: bold;
   text-align: left;
+}
+.arrow-down {
+  display: inline-block;
+  width: 0px;
+  height: 0;
+  border: 12px solid #e8e8e8;
+  border-color: #e8e8e8 transparent transparent transparent;
 }
