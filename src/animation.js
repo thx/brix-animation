@@ -4,6 +4,53 @@ define([
   'promise'
 ], function($, _, Promise) {
 
+  // 兼容动画事件
+  var
+    transitionEnd = 'transitionend',
+    animationEnd = 'animationend',
+    transitionProperty = 'transition',
+    animationProperty = 'animation';
+
+  if (!('ontransitionend' in window)) {
+    if ('onwebkittransitionend' in window) {
+
+      // Chrome/Saf (+ Mobile Saf)/Android
+      transitionEnd += ' webkitTransitionEnd';
+      transitionProperty = 'webkitTransition'
+    } else if ('onotransitionend' in dom.tNode || navigator.appName === 'Opera') {
+
+      // Opera
+      transitionEnd += ' oTransitionEnd';
+      transitionProperty = 'oTransition';
+    }
+  }
+  if (!('onanimationend' in window)) {
+    if ('onwebkitanimationend' in window) {
+      // Chrome/Saf (+ Mobile Saf)/Android
+      animationEnd += ' webkitAnimationEnd';
+      animationProperty = 'webkitAnimation';
+
+    } else if ('onoanimationend' in dom.tNode) {
+      // Opera
+      animationEnd += ' oAnimationEnd';
+      animationProperty = 'oAnimation';
+    }
+  }
+
+  //所有dom节点支持的事件
+  var testNode = document.createElement('div')
+  var allDomEvents = [] //所有支持的dom事件集合
+  var k
+  for (k in testNode) {
+    if (/^on/.test(k)) {
+      allDomEvents.push(k.slice(2))
+    }
+  }
+
+  //所有自定义待触发的事件
+  var customEmits = {}
+
+
   /**
    * [Animation description]
    */
@@ -64,19 +111,51 @@ define([
    */
   function registerBuiltinCommand() {
     var self = this
+      //在事件触发时，需要清空已经添加上的样式名，回到初始化
+    var addedClass = [] //已经添加的样式名数组
 
     /**
-     * dom事件触发
-     * on事件同类型只能出现一次
+     * 事件触发
+     * dom事件绑定，同类型只能出现一次
+     * 自定义事件需要emit触发
      */
     self.register('on', function(step) {
       var eventType = step.param
       var node = step.node
       var done = step.done
+      var index = step.index
 
-      node.on(eventType, function() {
-        done(step.index)
-      })
+      if ($.inArray(eventType, allDomEvents) > -1) { //dom事件
+        node.on(eventType, function() {
+          //清空附加上的class，初始化
+          console.log(addedClass)
+          addedClass.forEach(function(item, i) {
+            node.removeClass(item)
+          })
+          addedClass = []
+
+          done(index)
+        })
+      } else { //emit触发的事件
+        customEmits[eventType] = step
+      }
+    })
+
+    /**
+     * 触发特定on事件，（dom事件除外）
+     * @param  {[type]} step) {                     } [description]
+     * @return {[type]}       [description]
+     */
+    self.register('emit', function(step) {
+      var param = step.param
+      var node = step.node
+      var done = step.done
+
+      //触发自定义的事件
+      customEmits[param].done()
+
+      //
+      done()
     })
 
     /**
@@ -90,10 +169,12 @@ define([
       var mode = param.split(',')[1]
 
       node.addClass(className)
-      node.off('animationend.bxAnimation') //防止重复添加事件
+      addedClass.push(className)
+      node.off(animationEnd + '.bxAnimation') //防止重复添加事件
         //动画结束
-      node.on('animationend.bxAnimation', function() {
+      node.on(animationEnd + '.bxAnimation', function() {
         node.removeClass(className)
+        addedClass.splice(addedClass.indexOf(className), 1)
         done()
       })
     })
