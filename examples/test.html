@@ -18,11 +18,13 @@
   </head>
   <body>
 
-    <div class="box animated" style="margin: 100px;" bx-animation="style: transition all 0.5s, color yellow; class:swing; wait:500; class:shake; class:tada; style:margin-left 200px; style:background-color #B93E3E; ">
+    <div class="box animated" style="margin: 100px;" bx-animation="on:click; class:swing; emit:swing-over; wait:500; class:shake; emit:shake-over; class:tada; ">
       animation: trigger by click shake
     </div>
 
-    <!-- <div style="width:200px;background:red;position:relative;" id="SomeElementYouWantToAnimate">...</div> -->
+    <div class="box animated" style="margin: 100px;" bx-animation="on:swing-over; class:swing; on:shake-over; class:shake; class:tada; ">
+      animation: trigger by click shake
+    </div>
 
     <script>
       require([
