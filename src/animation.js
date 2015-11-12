@@ -167,6 +167,13 @@ define([
       var param = step.param
       var node = step.node
       var done = step.done
+
+      /**
+       * className格式：class:className,[mode]
+       * 参数：
+       * className：多个class空格隔开
+       * mode：模式，1-默认，添加完class在动画结束时移除它，2-添加完class后不移除该class
+       */
       var className = param.split(',')[0]
       var mode = param.split(',')[1]
 
@@ -175,8 +182,12 @@ define([
       node.off(animationEnd + '.bxAnimation') //防止重复添加事件
         //动画结束
       node.on(animationEnd + '.bxAnimation', function() {
-        node.removeClass(className)
-        addedClass.splice(addedClass.indexOf(className), 1)
+
+        if (mode !== '2') { //mode===2动画结束移除class
+          node.removeClass(className)
+          addedClass.splice(addedClass.indexOf(className), 1)
+        }
+
         done()
       })
     })
