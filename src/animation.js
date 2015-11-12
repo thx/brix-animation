@@ -113,6 +113,7 @@ define([
     var self = this
       //在事件触发时，需要清空已经添加上的样式名，回到初始化
     var addedClass = [] //已经添加的样式名数组
+    var waitItv //setTimeout在on事件触发时被清除
 
     /**
      * 事件触发
@@ -127,6 +128,9 @@ define([
 
       if (allDomEvents.indexOf(eventType) > -1) { //dom事件
         node.on(eventType, function() {
+          //on事件时清除setTimeout
+          clearTimeout(waitItv)
+
           //清空附加上的class，初始化
           console.log(addedClass)
           addedClass.forEach(function(item, i) {
@@ -185,7 +189,7 @@ define([
       var duration = step.param
       var done = step.done
 
-      setTimeout(function() {
+      waitItv = setTimeout(function() {
         done()
       }, duration)
     })
