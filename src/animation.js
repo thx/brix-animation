@@ -125,7 +125,7 @@ define([
       var done = step.done
       var index = step.index
 
-      if ($.inArray(eventType, allDomEvents) > -1) { //dom事件
+      if (allDomEvents.indexOf(eventType) > -1) { //dom事件
         node.on(eventType, function() {
           //清空附加上的class，初始化
           console.log(addedClass)
@@ -136,8 +136,6 @@ define([
 
           done(index)
         })
-      } else { //emit触发的事件
-        customEmits[eventType] = step
       }
     })
 
@@ -248,9 +246,35 @@ define([
       commands.pop()
     }
 
+    /**
+     * 将所有on自定义事件储存起来，等待触发
+     */
+    commands.forEach(function(item, i) {
+      var command = $.trim(item) //trim处理下前后空格
+      var commandName = $.trim(command.split(':')[0])
+      var commandValue = $.trim(command.split(':')[1])
+      var step = {
+        node: node, //当前动画的节点
+        index: i, //动画序列
+        param: commandValue, //动画参数
+        done: function(index) { //命令完成时调用done，来告诉系统执行下一个命令
+          var _i = index || i // on事件时，重设 i 的值
+
+          excuteCommand(++_i) //执行下一个命令
+        }
+      }
+
+      //自定义on事件
+      if (commandName === 'on' && allDomEvents.indexOf(commandValue) === -1) {
+        customEmits[commandValue] = step
+      }
+    })
+
+
     //逐个执行命令
-    (function(i) {
-      var callee = arguments.callee
+
+    function excuteCommand(i) {
+      // var callee = arguments.callee
       if (i > commands.length - 1) {
         i = 0
         return
@@ -269,7 +293,7 @@ define([
         done: function(index) { //命令完成时调用done，来告诉系统执行下一个命令
           var _i = index || i // on事件时，重设 i 的值
 
-          callee(++_i) //执行下一个命令
+          excuteCommand(++_i) //执行下一个命令
         }
       }
 
@@ -282,7 +306,10 @@ define([
       //执行命令代码
       builtinCommand(step)
 
-    }(0))
+    }
+
+    excuteCommand(0)
+
   }
 
   return Animation
