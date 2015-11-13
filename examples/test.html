@@ -14,11 +14,34 @@
     </script>
     <link rel="stylesheet" href="../bower_components/animate.css/animate.css">
     <link rel="stylesheet" href="../dist/css/base.css">
-
+    <style>
+      @keyframes btn-radius {
+        0% {
+          transform: translate(0, 0);
+        }
+        30% {
+          transform: translate(20px, 20px);
+        }
+        70% {
+          transform: translate(-20px, -20px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+      .haha {
+        background-color: black;
+        /*animation: btn-radius 1s forwards;*/
+      }
+    </style>
   </head>
   <body>
 
-    <div class="box animated" style="margin: 100px;" bx-animation="on:click; class:swing asdf; wait:1000; class:shake;class:tada; ">
+    <div class="box animated" style="margin: 100px;transition:all 1s;" bx-animation="on:click; class:haha; style: background-color blue; style: width 200px; class:swing; class:tada;">
+      animation: trigger by click shake
+    </div>
+
+    <div class="box animated" style="margin: 100px;transition:all 0.5s;" bx-animation="on:click; class:haha; class:swing; style:color yellow, margin-left 50px; class:shake; class:tada; ">
       animation: trigger by click shake
     </div>
 

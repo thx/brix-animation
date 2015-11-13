@@ -5,11 +5,10 @@ define([
 ], function($, _, Promise) {
 
   // 兼容动画事件
-  var
-    transitionEnd = 'transitionend',
-    animationEnd = 'animationend',
-    transitionProperty = 'transition',
-    animationProperty = 'animation';
+  var transitionEnd = 'transitionend';
+  var animationEnd = 'animationend';
+  var transitionProperty = 'transition';
+  var animationProperty = 'animation';
 
   if (!('ontransitionend' in window)) {
     if ('onwebkittransitionend' in window) {
@@ -163,16 +162,24 @@ define([
     /**
      * 添加样式
      */
+    //一个class里不允许同时出现animation跟transition动画
+    //请分两个class执行
+    //动画结束回调只会执行一次
     self.register('class', function(step) {
       var param = step.param
       var node = step.node
       var done = step.done
 
+      var isAnimEndCallback = false
+
       /**
        * className格式：class:className,[mode]
        * 参数：
        * className：多个class空格隔开
-       * mode：模式，1-默认，添加完class在动画结束时移除它，2-添加完class后不移除该class
+       * mode：模式，
+       *   1-默认，添加完class在动画结束时移除它，
+       *   2-添加完class后不移除该class,
+       *   3-添加不含动画的普通class
        */
       var className = param.split(',')[0]
       var mode = param.split(',')[1]
@@ -180,16 +187,27 @@ define([
       node.addClass(className)
       addedClass.push(className)
       node.off(animationEnd + '.bxAnimation') //防止重复添加事件
-        //动画结束
-      node.on(animationEnd + '.bxAnimation', function() {
+      node.off(transitionEnd + '.bxAnimation')
 
-        if (mode !== '2') { //mode===2动画结束移除class
-          node.removeClass(className)
-          addedClass.splice(addedClass.indexOf(className), 1)
+      if (mode === '3') { //普通无动画的class，直接执行done
+        done()
+      } else { //有动画的transition/animation动画完成执行回调
+        function animateEnd(e) { //callback
+          if (isAnimEndCallback) { //只执行一次动画结束的回调
+            return
+          }
+          isAnimEndCallback = true
+          if (mode !== '2') { //mode===2动画结束移除class
+            node.removeClass(className)
+            addedClass.splice(addedClass.indexOf(className), 1)
+          }
+          done()
         }
 
-        done()
-      })
+        //动画结束
+        node.on(animationEnd + '.bxAnimation', animateEnd)
+        node.on(transitionEnd + '.bxAnimation', animateEnd)
+      }
     })
 
     /**
@@ -206,25 +224,22 @@ define([
     })
 
     /**
-     * 移除样式
-     */
-    self.register('removeClass', function(step) {
-      var node = step.node
-      var className = step.param
-      var done = step.done
-
-      node.removeClass(className)
-      done()
-    })
-
-    /**
      * 增加内联样式
+     * 添加的style如果没有animation/transition动画效果，请指定mode为3
+     * 格式：
+     *   style: transition: width 0.5s, width 200px, 3
      */
     self.register('style', function(step) {
       var node = step.node
       var done = step.done
       var pairs = step.param.split(',')
       var styles = []
+      var mode
+      var isAnimEndCallback = false
+
+      if (!/\s+/.test($.trim(pairs[pairs.length - 1]))) {
+        mode = $.trim(pairs.pop())
+      }
 
       //支持多个内联样式，逗号分隔
       //exp: color red, display none;
@@ -240,7 +255,22 @@ define([
       _.each(styles, function(style, i) {
         node.css(style.name, style.value)
       })
-      done()
+
+      if (mode === '3') { //没有动画效果的样式
+        done()
+      } else {
+
+        function animateEnd(e) { //callback
+          if (isAnimEndCallback) { //只执行一次动画结束的回调
+            return
+          }
+          isAnimEndCallback = true
+          done()
+        }
+
+        node.on(transitionEnd + '.bxAnimation', animateEnd)
+        node.on(animationEnd + '.bxAnimation', animateEnd)
+      }
     })
 
   }
@@ -298,8 +328,9 @@ define([
       }
 
       //执行命令代码
-      builtinCommand(step)
-
+      setTimeout(function() { //setTimeout解决context环境问题
+        builtinCommand(step, {})
+      }, 0)
     }
 
     /**
