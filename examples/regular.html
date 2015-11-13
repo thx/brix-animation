@@ -1,0 +1,69 @@
+
+
+<html>
+  <head>
+    <link rel="stylesheet" href="../bower_components/animate.css/animate.css">
+    <script src="https://rawgit.com/regularjs/regular/next/dist/regular.js"></script>
+  </head>
+  <body>
+
+
+
+<style>
+  .box{
+    width: 400px;
+    height:100px;
+    background-color: #333;
+    text-align: center;
+    font-size: 20px;
+    color: #fff;
+    line-height: 100px;
+    margin: 10px;
+   cursor: pointer;
+  display: inline-block;
+}
+body{
+    padding: 20px;
+}
+</style>
+<!-- container -->
+<div id="app"></div>
+
+<script type="template/regular" id="animate">
+
+ <div class='box animated' r-animation=
+     "on: click;
+        class: swing ;
+        style: color red, background-color yellow, transition all 0.5s;
+        emit: swing-over ;
+        class: shake;
+        emit: shake-over"
+        >
+  box1: trigger by click
+</div>
+
+<div class='box animated' r-animation=
+     "on: swing-over;
+        class:  swing;
+      on:  shake-over;
+        class: shake;
+      ">box2: after box1 swing</div>
+
+
+</script>
+<script>
+  var Component = Regular.extend({
+    template: "#animate"
+})
+
+var component = new Component().$inject("#app");
+
+
+
+</script>
+
+  </body>
+</html>
+
+
+
