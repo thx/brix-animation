@@ -9,7 +9,10 @@
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-less": ""
+    "gulp-less": "",
+    "gulp-uglify": "",
+    "magix-app-deploy": "",
+    "grunt-contrib-uglify": ""
   },
   "peerDependencies": {},
   "keywords": [

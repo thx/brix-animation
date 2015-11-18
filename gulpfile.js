@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
+var uglify = require('gulp-uglify');
 var path = require('path');
 
 gulp.task('less', function() {
