@@ -178,7 +178,7 @@ define([
        * className：多个class空格隔开
        * mode：模式，
        *   1-默认，添加完class在动画结束时移除它，
-       *   2-添加完class后不移除该class,
+       *   2-添加完class动画结束后不移除该class,
        *   3-添加不含动画的普通class
        */
       var className = param.split(',')[0]
@@ -197,7 +197,7 @@ define([
             return
           }
           isAnimEndCallback = true
-          if (mode !== '2') { //mode===2动画结束移除class
+          if (mode !== '2') { //mode=1或默认时动画结束移除class
             node.removeClass(className)
             addedClass.splice(addedClass.indexOf(className), 1)
           }
@@ -227,7 +227,11 @@ define([
      * 增加内联样式
      * 添加的style如果没有animation/transition动画效果，请指定mode为3
      * 格式：
-     *   style: transition: width 0.5s, width 200px, 3
+     *   style: transition width 0.5s, width 200px, [mode:1,2,3]
+     *   mode:
+     *     1- 默认,style在动画结束时移除掉
+     *     2- 添加完style动画结束后不移除该style,
+     *     3- 添加不含动画效果的style
      */
     self.register('style', function(step) {
       var node = step.node
@@ -256,6 +260,9 @@ define([
         node.css(style.name, style.value)
       })
 
+      node.off(animationEnd + '.bxAnimation') //防止重复添加事件
+      node.off(transitionEnd + '.bxAnimation')
+
       if (mode === '3') { //没有动画效果的样式
         done()
       } else {
@@ -265,6 +272,11 @@ define([
             return
           }
           isAnimEndCallback = true
+          if (mode !== '2') { ///mode=1或默认时动画结束移除style
+            _.each(styles, function(style, i) {
+              node.css(style.name, '')
+            })
+          }
           done()
         }
 
