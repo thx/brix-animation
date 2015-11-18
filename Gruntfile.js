@@ -15,6 +15,7 @@ module.exports = function(grunt) {
     uglify: {
       target: {
         files: [{
+          ext: '-min.js',
           expand: true,
           cwd: 'src/',
           src: '**/*.js',
