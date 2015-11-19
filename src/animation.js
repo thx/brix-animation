@@ -1,8 +1,7 @@
 define([
   'jquery',
-  'underscore',
-  'promise'
-], function($, _, Promise) {
+  'underscore'
+], function($, _) {
 
   // 兼容动画事件
   var transitionEnd = 'transitionend';
