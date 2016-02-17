@@ -1,4 +1,4 @@
-define([
+define('brix/animation', [
   'jquery',
   'underscore'
 ], function($, _) {
