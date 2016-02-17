@@ -12,7 +12,8 @@
     "gulp-less": "",
     "gulp-uglify": "",
     "magix-app-deploy": "",
-    "grunt-contrib-uglify": ""
+    "grunt-contrib-uglify": "",
+    "grunt-contrib-copy": ""
   },
   "peerDependencies": {},
   "keywords": [
