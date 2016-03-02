@@ -38,7 +38,7 @@
 
       <div style="margin-bottom:40px;">
         <div class="tips" >典型配置：</div>
-        <pre><code class="language-css">&#60;div class="box animated" bx-animation="on:click;class:swing;wait:500;class:wobble;style:left 100px"&#62;&#60;/div&#62;</code></pre>
+        <pre><code class="language-css">&#60;div class="box animated" bx-animation="on:click;execute:testclick;class:swing;wait:500;class:wobble;style:left 100px"&#62;&#60;/div&#62;</code></pre>
       </div>
 
       <!-- <h4>Demos: </h4> -->
@@ -46,7 +46,7 @@
 
         <dt>点击触发</dt>
         <dd>
-          <div class="box animated"  bx-animation="on:click; class:swing;wait:500;class:shake;class:wobble;style:color yellow, background-color #B93E3E, left 100px, transition all 0.5s, 3;">
+          <div class="box animated"  bx-animation="on:click; execute:testclick('hahaha');  class:swing;wait:500;class:shake;class:wobble;style:color yellow, background-color #B93E3E, left 100px, transition all 0.5s, 3;">
             animation: trigger by click
           </div>
         </dd>
@@ -140,7 +140,14 @@ require([
         'jquery',
         'underscore'
       ], function(Anim, $, _) {
-        var options = {} //配置
+        var options = {
+          el: 'body',
+          owner: {
+            testclick: function(e, arg1) {
+              $(e.target).html('执行了testclick方法,方法的参数为' + arg1)
+            }
+          }
+        } //配置
         var anim = new Anim(options)
 
         //自定义扩展命令: 移除样式
@@ -152,8 +159,6 @@ require([
           node.removeClass(className)
           done() //结束执行done
         })
-
-        anim.boot() //启动
 
       })
 

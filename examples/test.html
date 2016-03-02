@@ -41,7 +41,7 @@
       animation: trigger by click shake
     </div>
 
-    <div class="box animated" style="margin: 100px;" bx-animation="on:click; class:haha,3; class:swing; class:shake; class:tada; ">
+    <div class="box animated" style="margin: 100px;" bx-animation="on:click; class:haha,3; class:swing; emit:swing-over; class:shake; class:tada;  ">
       animation: trigger by click shake
     </div>
 
@@ -49,27 +49,37 @@
       animation: trigger by click shake
     </div>
 
+    <div class="box animated" bx-animation="on:click; removeClass:box; execute:testclick(2); ">
+      animation: test
+    </div>
+
+    <div></div>
+
     <script>
       require([
         'brix/animation',
         'jquery',
         'underscore'
       ], function(Anim, $, _) {
-        var options = {} //配置
+        var options = {
+          el: 'body',
+          owner: {
+            testclick: function(e, arg1) {
+              alert(arg1)
+            }
+          }
+        } //配置
         var anim = new Anim(options)
 
         //自定义扩展命令
-        anim.register('wait', function(step) {
+        anim.register('removeClass', function(step) {
           var node = step.node
-          var duration = step.param
+          var className = step.param
           var done = step.done
 
-          setTimeout(function() {
-            done()
-          }, duration)
+          node.removeClass(className)
+          done()
         })
-
-        anim.boot() //启动
 
       })
     </script>
