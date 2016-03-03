@@ -73,22 +73,22 @@
     <div class="demo">
 
       <div style="margin-bottom:40px;">
-        <div class="tips" >on/emit自定义触发：</div>
-        <pre><code class="language-css">&#60;div class="box animated" bx-animation="on:click; class:swing; emit:swing-over; wait:500; class:shake; emit:shake-over; class:tada; "&#62;&#60;/div&#62;</code><br><code class="language-css">&#60;div class="box animated" bx-animation="on:swing-over; class:swing; on:shake-over; class:shake; class:tada; "&#62;&#60;/div&#62;</code></pre>
+        <div class="tips" >call/when自定义触发：</div>
+        <pre><code class="language-css">&#60;div class="box animated" bx-animation="on:click; class:swing; call:swing-over; wait:500; class:shake; call:shake-over; class:tada; "&#62;&#60;/div&#62;</code><br><code class="language-css">&#60;div class="box animated" bx-animation="when:swing-over; class:swing; when:shake-over; class:shake; class:tada; "&#62;&#60;/div&#62;</code></pre>
       </div>
 
       <!-- <h4>Demos: </h4> -->
       <dl class="demo-list">
 
         <dd>
-          <div class="box animated" bx-animation="on:click; class:swing; emit:swing-over; wait:500; class:shake; emit:shake-over; class:tada; ">
-            点击触发，然后emit触发另一个节点的动画
+          <div class="box animated" bx-animation="on:click; class:swing; call:swing-over; wait:500; class:shake; call:shake-over; class:tada; ">
+            点击触发，然后call触发另一个节点的动画
           </div>
         </dd>
 
         <dd>
-          <div class="box animated" bx-animation="on:swing-over; class:swing; on:shake-over; class:shake; class:tada; ">
-              配置on，在被emit时触发
+          <div class="box animated" bx-animation="when:swing-over; class:swing; when:shake-over; class:shake; class:tada; ">
+              配置when，在被call时触发
           </div>
         </dd>
       </dl>
@@ -108,7 +108,7 @@ require([
     var anim = new Anim(options)
 
     //自定义扩展命令: 移除样式
-    anim.register('removeClass', function(step) {
+    anim.extend('removeClass', function(step) {
       var node = step.node
       var className = step.param
       var done = step.done
@@ -128,9 +128,8 @@ require([
   class: <span class="comments">//添加class</span>
   execute: <span class="comments">//调用宿主上的方法</span>
   wait: <span class="comments">//延迟等待</span>
-  removeClass: <span class="comments">//移除样式</span>
   style: <span class="comments">//添加内联样式</span>
-  emit: <span class="comments">//触发自定义的事件</span>
+  call/when: <span class="comments">//触发自定义的事件</span>
 </pre>
 
   <img src="http://gtms04.alicdn.com/tps/i4/TB1hCnrJpXXXXagaXXXl3HeFXXX-1024-768.png" width="100%" alt="">
@@ -154,7 +153,7 @@ require([
         var anim = new Anim(options)
 
         //自定义扩展命令: 移除样式
-        anim.register('removeClass', function(step) {
+        anim.extend('removeClass', function(step) {
           var node = step.node
           var className = step.param
           var done = step.done
