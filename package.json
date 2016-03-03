@@ -16,7 +16,6 @@
     "gulp": "*",
     "gulp-connect": "^2.2.0",
     "gulp-jshint": "*",
-    "gulp-mocha-phantomjs": "*",
     "gulp-requirejs": "*",
     "gulp-uglify": "^1.2.0",
     "jshint-stylish": "*",

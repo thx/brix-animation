@@ -6,7 +6,7 @@ var jshint = require('gulp-jshint')
 var webpack = require("webpack")
 var rjs = require('gulp-requirejs')
 var uglify = require('gulp-uglify')
-var mochaPhantomJS = require('gulp-mocha-phantomjs')
+// var mochaPhantomJS = require('gulp-mocha-phantomjs')
 var exec = require('child_process').exec
 var less = require('gulp-less');
 var path = require('path');
@@ -72,12 +72,12 @@ gulp.task('watch', function( /*callback*/ ) {
 })
 
 // https://github.com/mrhooray/gulp-mocha-phantomjs
-gulp.task('test', function() {
-    return gulp.src('test/*.html')
-        .pipe(mochaPhantomJS({
-            reporter: 'spec'
-        }))
-})
+// gulp.task('test', function() {
+//     return gulp.src('test/*.html')
+//         .pipe(mochaPhantomJS({
+//             reporter: 'spec'
+//         }))
+// })
 
 // https://github.com/terinjokes/gulp-uglify
 gulp.task('compress', function() {
