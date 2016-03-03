@@ -42,15 +42,15 @@ h5 {
   margin: 0;
   padding: 0;
 }
-.top-nav {
+.topnav {
   text-align: center;
   padding: 30px 0 0;
 }
-.top-nav a {
+.topnav a {
   color: #333;
   margin: 0 10px;
 }
-.top-nav a:hover {
+.topnav a:hover {
   color: green;
 }
 .box {
