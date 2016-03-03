@@ -30,8 +30,10 @@
   </header>
 
   <section>
-    <div style="font-size:12px;padding:10px;color:#999">
-      gitlab地址： <a style="color:#999" href="http://gitlab.alibaba-inc.com/thx/brix-animation">http://gitlab.alibaba-inc.com/thx/brix-animation</a>
+    <div class="top-nav">
+      <a href="">文档</a>
+      <a href="">API</a>
+      <a href="http://gitlab.alibaba-inc.com/thx/brix-animation">Gitlab</a>
     </div>
 
     <div class="demo">
@@ -67,7 +69,7 @@
       </dl>
 
     </div>
-
+  <div style="text-align:center;padding:20px 0;"> <i class="arrow-down"></i></div>
     <div class="demo">
 
       <div style="margin-bottom:40px;">
@@ -92,7 +94,7 @@
       </dl>
     </div>
 
-<div style="text-align:center;padding:20px 0;"> <i class="arrow-down"></i></div>
+
 
 <div class="tips">调用方式：</div>
 <pre>
@@ -124,6 +126,7 @@ require([
 <pre>
   on: <span class="comments">//dom事件触发</span>
   class: <span class="comments">//添加class</span>
+  execute: <span class="comments">//调用宿主上的方法</span>
   wait: <span class="comments">//延迟等待</span>
   removeClass: <span class="comments">//移除样式</span>
   style: <span class="comments">//添加内联样式</span>

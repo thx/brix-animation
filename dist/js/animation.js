@@ -1,8 +1,20 @@
-define('brix/animation', [
+define('brix/animation/constant', [], function() {
+  return {
+    BX_ANIMATION_HOOK: 'bx-animation',
+    BX_ANIMATION_NAMESPACE: '.' + (Math.random() + '').replace(/\D/g, '')
+  }
+})
+
+/**
+ * 兼容性动画事件名
+ * @param  {[type]} $  [description]
+ * @param  {[type]} _) {}          [description]
+ * @return {[type]}    [description]
+ */
+define('brix/animation/compatEventName', [
   'jquery',
   'underscore'
 ], function($, _) {
-
   // 兼容动画事件
   var transitionEnd = 'transitionend';
   var animationEnd = 'animationend';
@@ -35,74 +47,30 @@ define('brix/animation', [
     }
   }
 
-  //所有dom节点支持的事件
-  var testNode = document.createElement('div')
-  var allDomEvents = [] //所有支持的dom事件集合
-  var k
-  for (k in testNode) {
-    if (/^on/.test(k)) {
-      allDomEvents.push(k.slice(2))
-    }
+  return {
+    transitionEnd: transitionEnd,
+    animationEnd: animationEnd,
+    transitionProperty: transitionProperty,
+    animationProperty: animationProperty
   }
-
-  //所有自定义待触发的事件
-  var customEmits = {}
+})
 
 
-  /**
-   * [Animation description]
-   */
-  function Animation() {
-    /**
-     * 内建的动画命令，可以this.register(name, fn)扩展之
-     * @type {Object}
-     */
-    this.builtinCommands = {}
-  }
 
-  /**
-   * Animation的所有方法
-   * @type {Object}
-   */
-  Animation.prototype = {
-    /**
-     * 启动
-     * @return {[type]} [description]
-     */
-    boot: function() {
-      var self = this
-
-      //注册内建的命令
-      registerBuiltinCommand.call(self)
-
-      //所有的带bx-animation的节点
-      var allAnimNode = $('[bx-animation]')
-
-      //各节点进行动画绑定
-      _.each(allAnimNode, function(node, i) {
-
-        //解析bx-animation配置
-        initAnimation.call(self, $(node))
-
-      })
-    },
-
-    /**
-     * 注册自定义的命令
-     * @param  {[type]}   name 命令名称
-     * @param  {Function} fn   命令函数体
-     *  function (step) {}
-     *      step {object}
-     *          step.node //当前节点
-     *          step.index //命令的index
-     *          step.param //命令的参数
-     *          step.done //执行完命令后的回调函数，会顺序调用接下来的命令
-     */
-    register: function(name, fn) {
-      this.builtinCommands[name] = fn
-    }
-  }
-
+/**
+ * 所有内建的命令
+ * @param  {[type]} $       [description]
+ * @param  {[type]} _)      {               return Magix.View.extend({    init: function(e) {                 this.viewOptions [description]
+ * @param  {[type]} render: function()    {                                var   self        [description]
+ * @return {[type]}         [description]
+ */
+define('brix/animation/registCommand', [
+  'jquery',
+  'underscore',
+  './allDomEvents',
+  './compatEventName',
+  './constant'
+], function($, _, allDomEvents, compatEventName, Constant) {
   /**
    * 注册内建的命令
    * @return {[type]} [description]
@@ -123,21 +91,59 @@ define('brix/animation', [
       var node = step.node
       var done = step.done
       var index = step.index
+      var $body = $(document.body)
+      var eventName = eventType + Constant.BX_ANIMATION_NAMESPACE
 
       if (allDomEvents.indexOf(eventType) > -1) { //dom事件
-        node.on(eventType, function() {
-          //on事件时清除setTimeout
-          clearTimeout(waitItv)
+        //事件代理到body根节点
+        $body.on(eventName, '[' + Constant.BX_ANIMATION_HOOK + ']', function(e) {
+          if (node[0] === e.currentTarget) { //事件到了当前节点
+            //on事件时清除setTimeout
+            clearTimeout(waitItv)
 
-          //清空附加上的class，初始化
-          console.log(addedClass)
-          addedClass.forEach(function(item, i) {
-            node.removeClass(item)
-          })
-          addedClass = []
+            //清空附加上的class，初始化
+            console.log(addedClass)
+            addedClass.forEach(function(item, i) {
+              node.removeClass(item)
+            })
+            addedClass = []
 
-          done(index)
+            done(index, e)
+          }
         })
+
+        if (_.indexOf(self._delegateEvents, eventName) === -1) {
+          self._delegateEvents.push(eventName)
+        }
+      }
+    })
+
+    /**
+     * 执行方法
+     * @param {object owner}
+     * @param  {[type]} step) {                     } [description]
+     * @return {[type]}       [description]
+     */
+    self.register('execute', function(step, event) {
+      var param = $.trim(step.param)
+      var node = step.node
+      var done = step.done
+      var owner = self.options.owner //执行方法的宿主
+
+      //解析方法&参数
+      // testclick(1,2,3)
+      var parseExecuteReg = /([^\(\)]+)(\(.+\))?/
+      var execute = parseExecuteReg.exec(param)
+      var func = execute[1]
+      var params = $.trim(/\((.+)\)/.exec(execute[2])[1]).split(/\s*\,\s*/)
+        //加上事件event
+      params.unshift(event)
+
+      if (parseExecuteReg) {
+        owner[func] && owner[func].apply(owner, params)
+        done()
+      } else {
+        done()
       }
     })
 
@@ -152,7 +158,7 @@ define('brix/animation', [
       var done = step.done
 
       //触发自定义的事件
-      customEmits[param].done()
+      self._customEmits[param].done()
 
       //
       done()
@@ -176,8 +182,8 @@ define('brix/animation', [
        * 参数：
        * className：多个class空格隔开
        * mode：模式，
-       *   1-默认，添加完class在动画结束时移除它，
-       *   2-添加完class动画结束后不移除该class,
+       *   1-默认，添加完class在动画结束时移除它(通常是添加animation型动画时)，
+       *   2-添加完class动画结束后不移除该class(通常是添加transition型动画时),
        *   3-添加不含动画的普通class
        */
       var className = param.split(',')[0]
@@ -185,8 +191,8 @@ define('brix/animation', [
 
       node.addClass(className)
       addedClass.push(className)
-      node.off(animationEnd + '.bxAnimation') //防止重复添加事件
-      node.off(transitionEnd + '.bxAnimation')
+      node.off(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE) //防止重复添加事件
+      node.off(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE)
 
       if (mode === '3') { //普通无动画的class，直接执行done
         done()
@@ -204,8 +210,8 @@ define('brix/animation', [
         }
 
         //动画结束
-        node.on(animationEnd + '.bxAnimation', animateEnd)
-        node.on(transitionEnd + '.bxAnimation', animateEnd)
+        node.on(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
+        node.on(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
       }
     })
 
@@ -259,8 +265,8 @@ define('brix/animation', [
         node.css(style.name, style.value)
       })
 
-      node.off(animationEnd + '.bxAnimation') //防止重复添加事件
-      node.off(transitionEnd + '.bxAnimation')
+      node.off(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE) //防止重复添加事件
+      node.off(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE)
 
       if (mode === '3') { //没有动画效果的样式
         done()
@@ -279,13 +285,50 @@ define('brix/animation', [
           done()
         }
 
-        node.on(transitionEnd + '.bxAnimation', animateEnd)
-        node.on(animationEnd + '.bxAnimation', animateEnd)
+        node.on(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
+        node.on(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
       }
     })
 
   }
 
+  return registerBuiltinCommand
+})
+
+
+/**
+ * 找出所有dom节点支持的事件
+ * @param  {[type]} Magix   [description]
+ * @param  {[type]} Loader) {               return Magix.View.extend({    init: function(e) {                 this.viewOptions [description]
+ * @param  {[type]} render: function()    {                                var   self        [description]
+ * @return {[type]}         [description]
+ */
+define('brix/animation/allDomEvents', [], function() {
+
+  //所有dom节点支持的事件
+  var testNode = document.createElement('div')
+  var allDomEvents = [] //所有支持的dom事件集合
+  var k
+  for (k in testNode) {
+    if (/^on/.test(k)) {
+      allDomEvents.push(k.slice(2))
+    }
+  }
+
+  return allDomEvents
+})
+
+
+/**
+ * 初始化每个节点的动画配置
+ * @param  {[type]} allDomEvents [description]
+ * @param  {[type]} Loader)      {               function initAnimation(node) {    var self [description]
+ * @return {[type]}              [description]
+ */
+define('brix/animation/initAnimation', [
+  './allDomEvents',
+  './constant'
+], function(allDomEvents, Constant) {
 
   /**
    * 解析bx-animation配置，挨个执行命令
@@ -295,7 +338,7 @@ define('brix/animation', [
    */
   function initAnimation(node) {
     var self = this
-    var commands = node.attr('bx-animation').split(';'); //分号分隔每条命令
+    var commands = node.attr(Constant.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
 
     //去掉;结尾导致数组多余的一个空值
     if ($.trim(commands[commands.length - 1]) === '') {
@@ -312,10 +355,10 @@ define('brix/animation', [
         node: node, //当前动画的节点
         index: i, //动画序列
         param: commandValue, //动画参数
-        done: function(index) { //命令完成时调用done，来告诉系统执行下一个命令
+        done: function(index, e) { //命令完成时调用done，来告诉系统执行下一个命令
           var _i = index || i // on事件时，重设 i 的值
 
-          excuteCommand(++_i) //执行下一个命令
+          executeCommand(++_i, e) //执行下一个命令
         }
       }
 
@@ -323,7 +366,7 @@ define('brix/animation', [
     }
 
     //逐个执行命令
-    function excuteCommand(i) {
+    function executeCommand(i, e) {
       // var callee = arguments.callee
       if (i > commands.length - 1) {
         i = 0
@@ -332,7 +375,7 @@ define('brix/animation', [
 
       //冒号分隔命令名与命令的参数
       var step = getStep(commands[i], i)
-      var builtinCommand = self.builtinCommands[step.command]
+      var builtinCommand = self._builtinCommands[step.command]
       if (!builtinCommand) { // 未定义的命令抛错
         throw step.command + ' 该命令未定义'
         return
@@ -340,7 +383,7 @@ define('brix/animation', [
 
       //执行命令代码
       setTimeout(function() { //setTimeout解决context环境问题
-        builtinCommand(step, {})
+        builtinCommand(step, e)
       }, 0)
     }
 
@@ -352,13 +395,99 @@ define('brix/animation', [
 
       //自定义on事件
       if (step.command === 'on' && allDomEvents.indexOf(step.param) === -1) {
-        customEmits[step.param] = step
+        self._customEmits[step.param] = step
       }
     })
 
     //逐个执行命令
-    excuteCommand(0)
+    executeCommand(0)
+  }
 
+  return initAnimation
+})
+
+
+/**
+ * 主菜
+ * @param  {[type]} $                [description]
+ * @param  {[type]} _                [description]
+ * @param  {[type]} compatEventName) {               var testNode [description]
+ * @return {[type]}                  [description]
+ */
+define('brix/animation', [
+  'jquery',
+  'underscore',
+  './animation/compatEventName',
+  './animation/registCommand',
+  './animation/allDomEvents',
+  './animation/initAnimation',
+  './animation/constant'
+], function($, _, compatEventName, registCommand, allDomEvents, initAnimation, Constant) {
+
+  /**
+   * [Animation description]
+   */
+  function Animation(options) {
+    var self = this
+
+    //配置
+    this.options = $.extend(true, {
+      el: 'body', //容器
+      owner: {} //execute执行方法的宿主
+    }, options)
+
+    //内建的动画命令，可以this.register(name, fn)扩展之
+    this._builtinCommands = {}
+
+    //所有自定义待触发的事件
+    this._customEmits = {}
+
+    //所有事件代理的集合容器
+    this._delegateEvents = []
+
+
+    //注册内建的命令
+    registCommand.call(self)
+
+    //所有的带bx-animation的节点
+    var allAnimNode = $(self.options.el).find('[' + Constant.BX_ANIMATION_HOOK + ']')
+
+    //各节点进行动画绑定
+    _.each(allAnimNode, function(node, i) {
+
+      //解析bx-animation配置
+      initAnimation.call(self, $(node))
+
+    })
+  }
+
+  /**
+   * Animation的所有方法
+   * @type {Object}
+   */
+  Animation.prototype = {
+
+    //销毁
+    destroy: function() {
+      _.each(this._delegateEvents, function(eventType) {
+        $(document.body).off(eventType)
+      })
+    },
+
+    /**
+     * 注册自定义的命令
+     * @param  {[type]}   name 命令名称
+     * @param  {Function} fn   命令函数体
+     *  function (step) {}
+     *      step {object}
+     *          step.node //当前节点
+     *          step.index //命令的index
+     *          step.param //命令的参数
+     *          step.done //执行完命令后的回调函数，会顺序调用接下来的命令
+     */
+    register: function(name, fn) {
+      this._builtinCommands[name] = fn
+    }
   }
 
   return Animation
