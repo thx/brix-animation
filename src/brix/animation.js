@@ -7,7 +7,7 @@
  * @param  {[type]} compatEventName) {               var testNode [description]
  * @return {[type]}                  [description]
  */
-define('brix/animation', [
+define([
   'jquery',
   'underscore',
   './animation/compatEventName',
@@ -16,12 +16,11 @@ define('brix/animation', [
   './animation/initAnimation',
   './animation/constant'
 ], function($, _, compatEventName, registCommand, /*allDomEvents,*/ initAnimation, Constant) {
-
   /**
    * [Animation description]
    */
   function Animation(options) {
-    var self = this
+    var self = this;
 
     //配置
     this.options = $.extend(true, {

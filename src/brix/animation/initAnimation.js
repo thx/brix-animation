@@ -4,7 +4,7 @@
  * @param  {[type]} Loader)      {               function initAnimation(node) {    var self [description]
  * @return {[type]}              [description]
  */
-define('brix/animation/initAnimation', [
+define([
   // './allDomEvents',
   './constant'
 ], function( /*allDomEvents,*/ Constant) {

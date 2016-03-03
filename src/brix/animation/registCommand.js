@@ -5,7 +5,7 @@
  * @param  {[type]} render: function()    {                                var   self        [description]
  * @return {[type]}         [description]
  */
-define('brix/animation/registCommand', [
+define([
   'jquery',
   'underscore',
   // './allDomEvents',
