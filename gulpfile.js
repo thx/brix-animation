@@ -6,13 +6,13 @@ var jshint = require('gulp-jshint')
 var webpack = require("webpack")
 var rjs = require('gulp-requirejs')
 var uglify = require('gulp-uglify')
-// var mochaPhantomJS = require('gulp-mocha-phantomjs')
+    // var mochaPhantomJS = require('gulp-mocha-phantomjs')
 var exec = require('child_process').exec
 var less = require('gulp-less');
 var path = require('path');
 var globs = ['src/**/*.js', 'docs/less/**/*.less']
-// var watchTasks = ['hello', 'madge', 'jshint', 'rjs', 'compress', 'test']
-var watchTasks = ['hello', 'rjs', 'compress', 'less']
+    // var watchTasks = ['hello', 'madge', 'jshint', 'rjs', 'compress', 'test']
+var watchTasks = ['hello', 'rjs', 'compress' /*, 'less'*/ ]
 
 gulp.task('hello', function() {
     console.log((function() {
@@ -56,7 +56,7 @@ gulp.task('rjs', function() {
     var build = {
         baseUrl: 'src',
         name: 'brix/animation',
-        out: 'dist/animation.js',
+        out: 'dist/animation-debug.js',
         paths: {
             jquery: 'empty:',
             underscore: 'empty:'
@@ -85,17 +85,24 @@ gulp.task('compress', function() {
     //     .pipe(uglify())
     //     .pipe(gulp.dest('dist/'))
 
-    gulp.src(['dist/**.js','!dist/**-debug.js'])
-        .pipe(through.obj(function(file, encoding, callback) { /* jshint unused:false */
+    // gulp.src(['dist/**.js','!dist/**-debug.js'])
+    //     .pipe(through.obj(function(file, encoding, callback) { /* jshint unused:false */
+    //         file.path = file.path.replace(
+    //             '.js',
+    //             '-debug.js'
+    //         )
+    //         callback(null, file)
+    //     }))
+    //     .pipe(gulp.dest('dist/'))
+    gulp.src(['dist/**-debug.js'])
+        .pipe(uglify())
+            .pipe(through.obj(function(file, encoding, callback) { /* jshint unused:false */
             file.path = file.path.replace(
-                '.js',
-                '-debug.js'
+                '-debug.js',
+                '.js'
             )
             callback(null, file)
         }))
-        .pipe(gulp.dest('dist/'))
-    gulp.src(['dist/**.js','!dist/**-debug.js'])
-        .pipe(uglify())
         .pipe(gulp.dest('dist/'))
 })
 
@@ -116,11 +123,15 @@ gulp.task('madge', function( /*callback*/ ) {
 })
 
 gulp.task('default', watchTasks.concat(['watch']))
-gulp.task('less', function() {
-  return gulp.src('./docs/less/**/*.less')
-    .pipe(less({
-      paths: [path.join(__dirname, 'less', 'includes')]
-    }))
-    .pipe(gulp.dest('./docs/less'));
+
+gulp.task('watchrjs', function() {
+    gulp.watch(globs, ['rjs'])
 })
 
+gulp.task('less', function() {
+    return gulp.src('./docs/less/**/*.less')
+        .pipe(less({
+            paths: [path.join(__dirname, 'less', 'includes')]
+        }))
+        .pipe(gulp.dest('./docs/less'));
+})

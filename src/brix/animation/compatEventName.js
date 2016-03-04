@@ -8,7 +8,6 @@ define([
   'jquery',
   'underscore'
 ], function($, _) {
-
   // 兼容动画事件
   var transitionEnd = 'transitionend';
   var animationEnd = 'animationend';
