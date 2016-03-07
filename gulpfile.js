@@ -12,7 +12,7 @@ var less = require('gulp-less');
 var path = require('path');
 var globs = ['src/**/*.js', 'docs/less/**/*.less']
     // var watchTasks = ['hello', 'madge', 'jshint', 'rjs', 'compress', 'test']
-var watchTasks = ['hello', 'rjs', 'compress' /*, 'less'*/ ]
+var watchTasks = ['hello', 'compress', 'rjs' /*, 'less'*/ ]
 
 gulp.task('hello', function() {
     console.log((function() {
@@ -124,8 +124,12 @@ gulp.task('madge', function( /*callback*/ ) {
 
 gulp.task('default', watchTasks.concat(['watch']))
 
-gulp.task('watchrjs', function() {
+gulp.task('watch1', function() {
     gulp.watch(globs, ['rjs'])
+})
+
+gulp.task('watch2', function() {
+    gulp.watch(globs, ['compress'])
 })
 
 gulp.task('less', function() {
