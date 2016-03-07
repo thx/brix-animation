@@ -125,7 +125,7 @@ gulp.task('madge', function( /*callback*/ ) {
 gulp.task('default', watchTasks.concat(['watch']))
 
 gulp.task('watch1', function() {
-    gulp.watch(globs, ['rjs'])
+    gulp.watch(globs, ['rjs', 'less'])
 })
 
 gulp.task('watch2', function() {
