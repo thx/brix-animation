@@ -31,8 +31,8 @@
 
   <section>
     <div class="topnav">
-      <a href="">文档</a>
-      <a href="">API</a>
+      <a class="on" href="index.html">文档</a>
+      <a href="api/api.html">API</a>
       <a href="http://gitlab.alibaba-inc.com/thx/brix-animation">Gitlab</a>
     </div>
 
@@ -100,25 +100,32 @@
 <pre>
   <code class="language-javascript">
 require([
-    'brix/animation',
-    'jquery',
-    'underscore'
-  ], function(Anim, $, _) {
-    var options = {} //配置暂无
-    var anim = new Anim(options)
+  'brix/animation',
+  'jquery',
+  'underscore'
+], function(Anim, $, _) {
+   //自定义扩展命令: 移除样式
+  Anim.extend('removeClass', function(step) {
+    var node = step.node
+    var className = step.param
+    var done = step.done
 
-    //自定义扩展命令: 移除样式
-    anim.extend('removeClass', function(step) {
-      var node = step.node
-      var className = step.param
-      var done = step.done
+    node.removeClass(className)
+    done() //结束执行done
+  })
 
-      node.removeClass(className)
-      done() //结束执行done，告知系统执行下一个命令
-    })
+  var options = {
+    el: $('body'),
+    owner: {
+      testclick: function(e, arg1) {
+        $(e.target).html('执行了testclick方法,方法的参数为' + arg1)
+      }
+    }
+  } //配置
+  var anim = new Anim(options)
 
-    anim.boot() //启动
-  })</code>
+})
+  </code>
 </pre>
 
 <div class="tips">内置的命令列表：</div>
@@ -142,18 +149,8 @@ require([
         'jquery',
         'underscore'
       ], function(Anim, $, _) {
-        var options = {
-          el: 'body',
-          owner: {
-            testclick: function(e, arg1) {
-              $(e.target).html('执行了testclick方法,方法的参数为' + arg1)
-            }
-          }
-        } //配置
-        var anim = new Anim(options)
-
-        //自定义扩展命令: 移除样式
-        anim.extend('removeClass', function(step) {
+         //自定义扩展命令: 移除样式
+        Anim.extend('removeClass', function(step) {
           var node = step.node
           var className = step.param
           var done = step.done
@@ -161,6 +158,16 @@ require([
           node.removeClass(className)
           done() //结束执行done
         })
+
+        var options = {
+          el: $('body'),
+          owner: {
+            testclick: function(e, arg1) {
+              $(e.target).html('执行了testclick方法,方法的参数为' + arg1)
+            }
+          }
+        } //配置
+        var anim = new Anim(options)
 
       })
 

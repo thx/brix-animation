@@ -15,7 +15,7 @@ define([
    *   - 分号分隔
    * @param  {dom} node 当前节点
    */
-  function initAnimation(node) {
+  function initAnimation(node, Animation) {
     var self = this
     var commands = node.attr(Constant.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
 
@@ -54,7 +54,7 @@ define([
 
       //冒号分隔命令名与命令的参数
       var step = getStep(commands[i], i)
-      var builtinCommand = self._builtinCommands[step.command]
+      var builtinCommand = Animation._builtinCommands[step.command]
       var whiteCommand = ['when'] //when命令不需要注册，也能自执行
       var isWhiteCommand = $.inArray(step.command, whiteCommand) > -1
 

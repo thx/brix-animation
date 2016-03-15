@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <!-- Include RequireJS -->
+    <script src="../../bower_components/requirejs/require.js"></script>
+    <script src="../../bower_components/prism/prism.js"></script>
+    <script type="text/javascript">
+        require.config({
+            paths: {
+                'brix/animation': '../../dist/animation-debug',
+                jquery: '../../bower_components/jquery/dist/jquery',
+                promise: '../../bower_components/promise/promise',
+                underscore: '../../bower_components/underscore/underscore'
+            }
+        })
+    </script>
+    <link rel="stylesheet" href="../../bower_components/animate.css/animate.css">
+    <link rel="stylesheet" href="../../bower_components/prism/themes/prism.css">
+    <link rel="stylesheet" href="http://g.assets.daily.taobao.net/thx/minecraft-animation/0.0.1/css/animate.css">
+    <link rel="stylesheet" href="./../less/base.css">
+
+  </head>
+  <body>
+
+  <header>
+    <h1>Animation <span style="font-size:50%;font-family:tahoma">for Brix</span> </h1>
+    <p>纯声明式、可扩展的动效系统</p>
+    <!-- <p class="code">http://gitlab.alibaba-inc.com/thx/brix-animation</p> -->
+    <a class="mc-anim-link" href="http://groups.alidemo.cn/thx/minecraft-animation/src/index.html">MineCraft <br>Animation</a>
+    <!-- <p>Easily, Flexible, Strong, Configurable animation</p> -->
+  </header>
+
+  <div class="container">
+    <div class="side">
+      <h2>API</h2>
+      <dl>
+        <dt><a href="#config">配置</a></dt>
+        <dd><a class="active" href="#el">el</a></dd>
+        <dd><a href="#owner">owner</a></dd>
+      </dl>
+      <dl>
+        <dt><a href="#command">指令</a></dt>
+        <dd><a href="#on">on</a></dd>
+        <dd><a href="#execute">execute</a></dd>
+        <dd><a href="#class">class</a></dd>
+        <dd><a href="#style">style</a></dd>
+        <dd><a href="#wait">wait</a></dd>
+        <dd><a href="#call">call</a></dd>
+        <dd><a href="#when">when</a></dd>
+      </dl>
+      <dl>
+        <dt><a href="#">方法</a></dt>
+        <dd><a href="#extend">destroy</a></dd>
+      </dl>
+      <dl>
+        <dt><a href="#">全局方法</a></dt>
+        <dd><a href="#extend">Animation.extend</a></dd>
+      </dl>
+    </div>
+
+    <div class="main">
+      <div class="topnav" style="margin-bottom: 30px;">
+        <a href="../index.html">文档</a>
+        <a class="on" href="#">API</a>
+        <a href="http://gitlab.alibaba-inc.com/thx/brix-animation">Gitlab</a>
+      </div>
+
+      <h3 class="title" id="config"> 配置 </h3>
+<div>初始化配置</div>
+<div class="mb40">
+<pre>
+<code class="language-javascript">
+var options = {
+    el: $('body'),
+    owner: {
+      testclick: function(e, arg1) {
+        $(e.target).html('执行了testclick方法,方法的参数为' + arg1)
+      }
+    }
+  } //配置
+var anim = new Anim(options)
+</code>
+</pre>
+</div>
+
+      <div class="api">
+        <h4 class="api-name" id="el">el</h4>
+        <ul class="api-li">
+          <li>类型：<span class="key-code">Node</span></li>
+          <li>默认值：<span class="key-code">$('body')</span></li>
+          <li>说明：指定根节点，根节点范围内的bx-animation配置会生效，支持<span class="key-code">selector&lt;string&gt;|Node</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="api">
+        <h4 class="api-name" id="owner">owner</h4>
+        <ul class="api-li">
+          <li>类型：<span class="key-code">Object</span></li>
+          <li>默认值：<span class="key-code">{}</span></li>
+          <li>说明：指定<span class="key-code">execute</span>指令的宿主，<span class="key-code">execute</span>指令指定的方法会在owner上触发
+          </li>
+          <li>用法：
+<pre>
+<code class="language-javascript">
+&lt;div bx-animation="on:click; execute:testClick(1)"&gt;&lt;/div&gt;
+</code></pre>
+<div>
+<span class="key-code">testClick</span>方法会在<span class="key-code">owner.testClick</span>上触发
+</div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+  <script type="text/javascript" src="../scripts/script.js"></script>
+  </body>
+</html>

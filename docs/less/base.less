@@ -3,38 +3,46 @@ body {
   font-size: 14px;
   background-color: #fafafa;
   color: #333;
-  font-family: 'Source Code Pro',  Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Source Code Pro', Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
 a {
   color: green;
   text-decoration: none;
 }
+
 pre {
-  font-family: 'Source Code Pro',  Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Source Code Pro', Monaco, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
   background-color: #fafafa;
   padding: 10px;
-  &.code {
 
+  &.code {
   }
+
 }
+
 .comments {
   color: #999;
 }
+
 .nav {
   overflow: hidden;
   text-align: center;
+
   a {
     display: inline-block;
-    line-height: 40px;
-    /*background-color: #ccc;*/
+    line-height: 40px;    /*background-color: #ccc;*/
     padding: 0 20px;
     margin-left: 1px;
     transition: all 0.3s ease-out;
+
     &:hover {
       background-color: #fafafa;
     }
+
   }
+
 }
 
 h3,
@@ -47,16 +55,25 @@ h5 {
   margin: 0;
   padding: 0;
 }
+
 .topnav {
   text-align: center;
   padding: 30px 0 0;
+
   a {
     color: #333;
     margin: 0 10px;
+
     &:hover {
       color: green;
     }
+
+    &.on {
+      border-bottom: 2px solid #4CA26F;
+    }
+
   }
+
 }
 
 .box {
@@ -84,11 +101,13 @@ header {
   position: absolute;
   left: 0;
   right: 0;
-  box-shadow: 0 3px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+
   p {
     font-family: tahoma;
     opacity: 0.8;
   }
+
 }
 
 /*code {
@@ -99,22 +118,21 @@ header {
   border-radius: 4px;
   font-family: 'Source Code Pro', Monaco, courier, monospace;
 }*/
-
 section {
   padding: 166px 50px 50px;
-  width: 860px;
-  /*padding: 0 30px;*/
+  width: 860px;  /*padding: 0 30px;*/
   margin: 0 auto;
-  background-color: white;
-  /*min-height: 800px;*/
+  background-color: white;  /*min-height: 800px;*/
 }
 
 .demo {
+
   /*padding: 20px 0;*/
 }
 
 .demo-list {
   text-align: center;
+
   dd {
     margin-bottom: 40px;
   }
@@ -124,21 +142,22 @@ section {
   }
 
 }
+
 .mc-anim-link {
   position: absolute;
   left: -90px;
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   padding: 100px 60px 10px;
   top: -70px;
   color: white;
-  transition: all 0.3s ease-out;
-  /*background-color: white;*/
+  transition: all 0.3s ease-out;  /*background-color: white;*/
   transform: rotate(-45deg);
+
   &:hover {
     color: yellow;
-    background-color: rgba(0,0,0,0.15);
-    /*box-shadow: 0 3px 3px rgba(0,0,0,0.1)*/
+    background-color: rgba(0, 0, 0, 0.15);    /*box-shadow: 0 3px 3px rgba(0,0,0,0.1)*/
   }
+
 }
 
 .tips {
@@ -148,10 +167,104 @@ section {
   font-weight: bold;
   text-align: left;
 }
+
 .arrow-down {
   display: inline-block;
   width: 0px;
   height: 0;
   border: 12px solid #ddd;
   border-color: #ddd transparent transparent transparent;
+}
+
+.container {
+  padding: 166px 80px 0;
+}
+
+.main {
+  height: 1500px;
+  max-width: 700px;
+  background-color: #fff;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.side {
+  position: absolute;
+  left: 50px;
+  top: 196px;
+  /*margin-top: 30px;*/
+  height: 100%;
+  overflow: auto;
+
+  h2 {
+    font-family: arial;
+    margin-bottom: 20px;
+  }
+
+  dl {
+    line-height: 1.5;
+    a {
+      color: #333;
+      &.active {
+        color: #008000;
+      }
+    }
+
+    margin-bottom: 10px;
+
+    dd {
+      padding-left: 15px;
+      font-size: 12px;
+    }
+
+  }
+
+}
+
+.side-fixed {
+  position: fixed;
+  top: 30px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+.api-name {
+  font-size: 16px;
+  font-weight: bold;
+  &:before {
+    content: '#';
+    color: #4CA26F;
+    margin-right: 5px;
+  }
+  margin-bottom: 15px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mb40 {
+  margin-bottom: 40px;
+}
+
+.key-code {
+  background-color: #f5f5f5;
+  border-radius: 3px;
+  color: #2F9056;
+  padding: 0 5px;
+  margin: 0 5px;
+}
+.api {
+  margin-bottom: 50px;
+}
+
+.api-li {
+  padding-left: 40px;
+  line-height: 2;
+
 }

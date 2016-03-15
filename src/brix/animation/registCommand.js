@@ -16,7 +16,7 @@ define([
    * 注册内建的命令
    * @return {[type]} [description]
    */
-  function registerBuiltinCommand() {
+  function registerBuiltinCommand(Animation) {
     var self = this
       //在事件触发时，需要清空已经添加上的样式名，回到初始化
     var addedClass = [] //已经添加的样式名数组
@@ -27,7 +27,7 @@ define([
      * dom事件绑定，同类型只能出现一次
      * 自定义事件需要emit触发
      */
-    self.extend('on', function(step) {
+    Animation.extend('on', function(step) {
       var eventType = step.param
       var node = step.node
       var done = step.done
@@ -65,7 +65,7 @@ define([
      * @param  {[type]} step) {                     } [description]
      * @return {[type]}       [description]
      */
-    self.extend('execute', function(step, event) {
+    Animation.extend('execute', function(step, event) {
       var param = $.trim(step.param)
       var node = step.node
       var done = step.done
@@ -103,7 +103,7 @@ define([
 
           //返回的是promise
           if (_.isObject(isStop) && isStop.then && isStop.fail && isStop.done) {
-            // debugger
+
             isStop.then(function(param) {
               if (param !== false) { //函数返回false会中断动画流程
                 done(event)
@@ -128,7 +128,7 @@ define([
      * @param  {[type]} step) {                     } [description]
      * @return {[type]}       [description]
      */
-    self.extend('call', function(step, event) {
+    Animation.extend('call', function(step, event) {
       var param = step.param
       var node = step.node
       var done = step.done
@@ -147,7 +147,7 @@ define([
     //一个class里不允许同时出现animation跟transition动画
     //请分两个class执行
     //动画结束回调只会执行一次
-    self.extend('class', function(step, event) {
+    Animation.extend('class', function(step, event) {
       var param = step.param
       var node = step.node
       var done = step.done
@@ -195,7 +195,7 @@ define([
     /**
      * 延迟等待
      */
-    self.extend('wait', function(step, event) {
+    Animation.extend('wait', function(step, event) {
       var node = step.node
       var duration = step.param
       var done = step.done
@@ -215,7 +215,7 @@ define([
      *     2- 添加完style动画结束后不移除该style,
      *     3- 添加不含动画效果的style
      */
-    self.extend('style', function(step, event) {
+    Animation.extend('style', function(step, event) {
       var node = step.node
       var done = step.done
       var pairs = step.param.split(',')
