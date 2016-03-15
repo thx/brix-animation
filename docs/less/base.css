@@ -175,7 +175,8 @@ section {
   color: #333;
 }
 .side dl a.active {
-  color: #008000;
+  color: #2F9056;
+  font-weight: bold;
 }
 .side dl dd {
   padding-left: 15px;
