@@ -75,7 +75,7 @@ var options = {
     el: $('body'),
     owner: {
       testclick: function(e, arg1) {
-        $(e.target).html('执行了testclick方法,方法的参数为' + arg1)
+        $(e.node).html('执行了testclick方法,方法的参数为' + arg1)
       }
     }
   } //配置
