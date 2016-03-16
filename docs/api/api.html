@@ -171,7 +171,7 @@ var anim = new Animation(options)
           </li>
           <li>说明：<span class="key-code">execute</span>可以触发指定<a href="#owner"><span class="key-code">onwer</span></a>上的方法，并且支持传参
            <ul class="api-li">
-             <li><span class="key-code">execute</span>执行的方法支持<span class="key-code">promise</span>异步，示例：
+             <li><span class="key-code">execute</span>执行的方法支持<span class="key-code">promise</span>异步，如果使用了<span class="key-code">promise</span>系统会等待<span class="key-code">d.resolve()</span>之后再执行后续指令，示例：
                 <div>
 <pre>
 <code class="language-javascript">
