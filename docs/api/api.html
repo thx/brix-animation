@@ -53,7 +53,7 @@
       </dl>
       <dl>
         <dt><a href="#globalmethod">全局方法</a></dt>
-        <dd><a href="#extend">Anim.extend</a></dd>
+        <dd><a href="#extend">Animation.extend</a></dd>
       </dl>
     </div>
 
@@ -79,7 +79,7 @@ var options = {
       }
     }
   } //配置
-var anim = new Anim(options)
+var anim = new Animation(options)
 </code>
 </pre>
 </div>
@@ -147,7 +147,7 @@ var anim = new Anim(options)
           <li>用法：
 <pre>
 <code class="language-javascript">
-&lt;div bx-animation="on:click; execute:testClick(1)"&gt;&lt;/div&gt;
+&lt;div bx-animation="on:click; class:swing;"&gt;&lt;/div&gt;
 </code></pre>
 <div>
 </div>
@@ -331,7 +331,7 @@ anim.destroy()
        <h3 class="title" id="globalmethod"> 全局方法 </h3>
 
        <div class="api">
-        <h4 class="api-name" id="extend">Anim.extend(name, fn)</h4>
+        <h4 class="api-name" id="extend">Animation.extend(name, fn)</h4>
         <ul class="api-li">
           <li>类型：<span class="key-code">Function</span></li>
           <li>参数：<span class="key-code">name&lt;String&gt;, fn&lt;Function&gt;</span> </li>
@@ -350,7 +350,7 @@ anim.destroy()
 <pre>
 <code class="language-javascript">
 //自定义扩展命令: 移除样式
-Anim.extend('removeClass', function(step) {
+Animation.extend('removeClass', function(step) {
   var node = step.node
   var className = step.param
   var done = step.done
