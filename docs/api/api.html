@@ -100,6 +100,7 @@ var anim = new Animation(options)
           <li>类型：<span class="key-code">Object</span></li>
           <li>默认值：<span class="key-code">{}</span></li>
           <li>说明：指定<span class="key-code">execute</span>指令的宿主，<span class="key-code">execute</span>指令指定的方法会在owner上触发
+
           </li>
           <li>用法：
 <pre>
@@ -160,16 +161,48 @@ var anim = new Animation(options)
         <ul class="api-li">
           <li>类型：<span class="key-code">指令</span></li>
           <li>支持的值：<a href="#owner"><span class="key-code">owner</span></a>上所挂载的方法 </li>
-          <li>说明：<span class="key-code">execute</span>可以触发指定<a href="#owner"><span class="key-code">onwer</span></a>上的方法，并且支持传参
-          </li>
-          <li>用法：
+    <li>用法：
 <pre>
 <code class="language-javascript">
-&lt;div bx-animation="on:click; execute:testClick(1)"&gt;&lt;/div&gt;
+&lt;div bx-animation="on:click; execute:testClick(300)"&gt;&lt;/div&gt;
 </code></pre>
 <div>
 </div>
           </li>
+          <li>说明：<span class="key-code">execute</span>可以触发指定<a href="#owner"><span class="key-code">onwer</span></a>上的方法，并且支持传参
+           <ul class="api-li">
+             <li><span class="key-code">execute</span>执行的方法支持<span class="key-code">promise</span>异步，示例：
+                <div>
+<pre>
+<code class="language-javascript">
+testClick: function(evt, displacement) {
+  var el = evt.node //evt: 事件的原始event混入node(当前事件触发节点)
+  var d = $.Deferred() //promise
+
+  el.animate({
+    left: displacement,
+    top: displacement
+  }, {
+    duration: 1300,
+    queue: false,
+    specialEasing: {
+      left: 'swing',
+      top: 'easeOutBounce'
+    },
+    complete: function() {
+      d.resolve() //异步
+    }
+  })
+
+  return d.promise()
+}
+</code></pre>
+                </div>
+             </li>
+             <li>方法返回<span class="key-code">false</span>的话会中断后续流程</li>
+           </ul>
+          </li>
+
         </ul>
       </div>
 

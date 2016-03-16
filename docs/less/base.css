@@ -226,3 +226,9 @@ section {
   padding-left: 40px;
   line-height: 2;
 }
+.api-tips {
+  border-left: 3px solid #FF8B36;
+  background-color: #fafafa;
+  padding: 5px 10px;
+  margin: 10px;
+}
