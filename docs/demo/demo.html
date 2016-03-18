@@ -1,0 +1,215 @@
+<html>
+  <head>
+    <!-- Include RequireJS -->
+    <script src="../../bower_components/requirejs/require.js"></script>
+    <script src="../../bower_components/prism/prism.js"></script>
+    <script src="../scripts/jquery.easing.js"></script>
+    <script type="text/javascript">
+        require.config({
+            paths: {
+                'brix/animation': '../../dist/animation-debug',
+                jquery: '../../bower_components/jquery/dist/jquery',
+                promise: '../../bower_components/promise/promise',
+                underscore: '../../bower_components/underscore/underscore'
+            }
+        })
+    </script>
+    <link rel="stylesheet" href="../../bower_components/animate.css/animate.css">
+    <link rel="stylesheet" href="../../bower_components/prism/themes/prism.css">
+    <link rel="stylesheet" href="http://g.assets.daily.taobao.net/thx/minecraft-animation/0.0.1/css/animate.css">
+    <link rel="stylesheet" href="./../less/base.css">
+
+  </head>
+  <body>
+
+  <header>
+    <h1>Animation <span style="font-size:50%;font-family:tahoma">for Brix</span> </h1>
+    <p>纯声明式、可扩展的动效系统</p>
+    <!-- <p class="code">http://gitlab.alibaba-inc.com/thx/brix-animation</p> -->
+    <a class="mc-anim-link" href="http://groups.alidemo.cn/thx/minecraft-animation/src/index.html">MineCraft <br>Animation</a>
+    <!-- <p>Easily, Flexible, Strong, Configurable animation</p> -->
+  </header>
+
+  <div class="container">
+    <div class="main" style="max-width:900px;">
+      <div class="topnav" style="margin-bottom: 30px;">
+        <a href="../index.html">文档</a>
+        <a  href="../api/api.html">API</a>
+        <a class="on" href="../demo/demo.html">DEMO</a>
+        <a href="http://gitlab.alibaba-inc.com/thx/brix-animation">Gitlab</a>
+      </div>
+
+
+
+<style type="text/css">
+  .show-transition {
+    transition: all 0.5s;
+    overflow: hidden;
+    height: 20px;
+  }
+  .show-enter,
+  .show-leave {
+    opacity: 0;
+    height: 0;
+  }
+
+  .transition-anim {
+    width: 100px;
+    transition: all 1s;
+  }
+
+  .drop-ball {
+    position: absolute;
+    left: 100px;
+    top: 120px;
+    width: 60px;
+    height: 60px;
+    background-color: #D20000;
+    border-radius: 100%;
+    color: white;
+    line-height: 60px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+@-webkit-keyframes disappear {
+  0% {
+    transform: scale(1);
+    top: 400px;
+  }
+  20% {
+    transform: scale(1.3);
+    top: 380px;
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
+    top: 500px;
+  }
+}
+.drop-ball-disappear {
+  animation-name: disappear;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in;
+  /*animation-delay: 0;*/
+  animation-iteration-count: 1;
+  animation-direction: alternate;
+  /*animation-play-state*/
+  animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes zoom {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.3);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+
+  75% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+.drop-ball-zoom {
+  animation-name: zoom;
+  animation-duration: 0.6s;
+  animation-timing-function: ease-in;
+  /*animation-delay: 0;*/
+  animation-iteration-count: 1;
+  animation-direction: alternate;
+  /*animation-play-state*/
+  animation-fill-mode: forwards;
+}
+
+.drop-groud {
+  position: absolute;
+  top: 460px;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background-color: #ccc;
+}
+
+.linkage-anim {
+  position: absolute;
+  width: 200px;
+  height: 40px;
+  background-color: green;
+  top: 100px;
+  color: white;
+  line-height: 40px;
+  text-align: center;
+  left: 400px;
+}
+
+</style>
+<div style="height: 800px;">
+
+
+  <div class="drop-ball" bx-animation="on:click; class:drop-ball-zoom; wait:200; execute:dropBall(400); call:text-changed; class:drop-ball-disappear,2;">Click</div>
+  <div class="linkage-anim animated" bx-animation="when:text-changed; execute: test(); class:tada;">联动的动画元素</div>
+  <div class="drop-groud"></div>
+
+</div>
+
+    </div>
+
+  </div>
+  <script type="text/javascript">
+  var owner = {
+    dropBall: function(evt, displacement) {
+      var el = evt.node
+      var d = $.Deferred()
+
+      el.animate({
+        left: displacement,
+        top: displacement
+      }, {
+        duration: 1300,
+        queue: false,
+        specialEasing: {
+          left: 'swing',
+          top: 'easeOutBounce'
+        },
+        complete: function() {
+          d.resolve()
+        }
+      })
+
+      return d.promise()
+    },
+
+    test: function(evt) {
+      evt.node.html('联动元素被触发了')
+    }
+  }
+
+  require([
+    'brix/animation',
+    'jquery',
+    'underscore'
+  ], function(Anim, $, _) {
+     //自定义扩展命令: 移除样式
+    var options = {
+      el: $('body'),
+      owner: owner
+    } //配置
+    var anim = new Anim(options)
+  })
+
+
+  </script>
+  </body>
+</html>
