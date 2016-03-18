@@ -40,7 +40,6 @@
       </div>
 
 
-
 <style type="text/css">
   .show-transition {
     transition: all 0.5s;
@@ -60,6 +59,7 @@
 
   .drop-ball {
     position: absolute;
+    transition: transform 0.3s;
     left: 100px;
     top: 120px;
     width: 60px;
@@ -72,6 +72,10 @@
     font-weight: bold;
     cursor: pointer;
     z-index: 10;
+  }
+  .drop-ball:hover {
+    /*background-color: green;*/
+    transform: scale(1.2);
   }
 
 @-webkit-keyframes disappear {
@@ -156,7 +160,7 @@
 }
 
 </style>
-<div style="height: 800px;">
+<div >
 
 
   <div class="drop-ball" bx-animation="on:click; class:drop-ball-zoom; wait:200; execute:dropBall(400); call:text-changed; class:drop-ball-disappear,2;">Click</div>
