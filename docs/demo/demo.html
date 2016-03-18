@@ -133,13 +133,14 @@
   animation-fill-mode: forwards;
 }
 
-.drop-groud {
+.drop-ground {
   position: absolute;
   top: 460px;
   left: 0;
-  height: 5px;
+  height: 100%;
+  border-top: 4px solid #538832;
   width: 100%;
-  background-color: #ccc;
+  background-color: #EDFDEF;
 }
 
 .linkage-anim {
@@ -160,7 +161,7 @@
 
   <div class="drop-ball" bx-animation="on:click; class:drop-ball-zoom; wait:200; execute:dropBall(400); call:text-changed; class:drop-ball-disappear,2;">Click</div>
   <div class="linkage-anim animated" bx-animation="when:text-changed; execute: test(); class:tada;">联动的动画元素</div>
-  <div class="drop-groud"></div>
+  <div class="drop-ground"></div>
 
 </div>
 
