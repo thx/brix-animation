@@ -12,7 +12,7 @@ var less = require('gulp-less');
 var path = require('path');
 var globs = ['src/**/*.js', 'docs/less/**/*.less']
     // var watchTasks = ['hello', 'madge', 'jshint', 'rjs', 'compress', 'test']
-var watchTasks = ['hello', 'compress', 'rjs' /*, 'less'*/ ]
+var watchTasks = ['hello', 'ex-compress', 'ex-rjs' /*, 'less'*/ ]
 
 gulp.task('hello', function() {
     console.log((function() {
@@ -52,7 +52,7 @@ gulp.task('jshint', function() {
 
 // https://github.com/RobinThrift/gulp-requirejs
 // http://requirejs.org/docs/optimization.html#empty
-gulp.task('rjs', function() {
+gulp.task('ex-rjs', function() {
     var build = {
         baseUrl: 'src',
         name: 'brix/animation',
@@ -80,7 +80,7 @@ gulp.task('watch', function( /*callback*/ ) {
 // })
 
 // https://github.com/terinjokes/gulp-uglify
-gulp.task('compress', function() {
+gulp.task('ex-compress', function() {
     // gulp.src(['dist/**-debug.js'])
     //     .pipe(uglify())
     //     .pipe(gulp.dest('dist/'))
@@ -122,15 +122,24 @@ gulp.task('madge', function( /*callback*/ ) {
     )
 })
 
+//直接同时监听rjs跟compress有问题
+//改成分开监听
 gulp.task('default', watchTasks.concat(['watch']))
 
-gulp.task('watch1', function() {
-    gulp.watch(globs, ['rjs', 'less'])
+//requirejs模块合并工具
+var watchTaskRjs = ['ex-rjs', 'less']
+gulp.task('rjs', watchTaskRjs.concat(['watchRjs']))
+gulp.task('watchRjs', function() {
+    gulp.watch(globs, watchTaskRjs)
 })
 
-gulp.task('watch2', function() {
-    gulp.watch(globs, ['compress'])
+//compress工具
+var watchTaskCompress = ['ex-compress']
+gulp.task('compress', watchTaskCompress.concat(['watchCompress']))
+gulp.task('watchCompress', function() {
+    gulp.watch(globs, watchTaskCompress)
 })
+
 
 gulp.task('less', function() {
     return gulp.src('./docs/less/**/*.less')

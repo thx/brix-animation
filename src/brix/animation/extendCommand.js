@@ -16,7 +16,7 @@ define([
    * 注册内建的命令
    * @return {[type]} [description]
    */
-  function registerBuiltinCommand(Animation) {
+  function extendBuiltinCommand(Animation) {
     var self = this
       //在事件触发时，需要清空已经添加上的样式名，回到初始化
     var addedClass = [] //已经添加的样式名数组
@@ -269,5 +269,5 @@ define([
 
   }
 
-  return registerBuiltinCommand
+  return extendBuiltinCommand
 })

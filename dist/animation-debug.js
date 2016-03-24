@@ -69,7 +69,7 @@ define('brix/animation/constant',[], function() {
  * @param  {[type]} render: function()    {                                var   self        [description]
  * @return {[type]}         [description]
  */
-define('brix/animation/registCommand',[
+define('brix/animation/extendCommand',[
   'jquery',
   'underscore',
   // './allDomEvents',
@@ -80,7 +80,7 @@ define('brix/animation/registCommand',[
    * 注册内建的命令
    * @return {[type]} [description]
    */
-  function registerBuiltinCommand(Animation) {
+  function extendBuiltinCommand(Animation) {
     var self = this
       //在事件触发时，需要清空已经添加上的样式名，回到初始化
     var addedClass = [] //已经添加的样式名数组
@@ -333,7 +333,7 @@ define('brix/animation/registCommand',[
 
   }
 
-  return registerBuiltinCommand
+  return extendBuiltinCommand
 })
 ;
 /**
@@ -438,20 +438,21 @@ define('brix/animation/initAnimation',[
  * @param  {[type]} compatEventName) {               var testNode [description]
  * @return {[type]}                  [description]
  */
+
 define('brix/animation',[
   'jquery',
   'underscore',
   './animation/compatEventName',
-  './animation/registCommand',
+  './animation/extendCommand',
   // './animation/allDomEvents',
   './animation/initAnimation',
   './animation/constant'
-], function($, _, compatEventName, registCommand, /*allDomEvents,*/ initAnimation, Constant) {
+], function($, _, compatEventName, extendCommand, /*allDomEvents,*/ initAnimation, Constant) {
   /**
    * [Animation description]
    */
   function Animation(options) {
-    var self = this;
+    var self = this
 
     //配置
     this.options = $.extend(true, {
@@ -473,7 +474,7 @@ define('brix/animation',[
     this._eventNamespace = '.' + (Math.random() + '').replace(/\D/g, '')
 
     //注册内建的命令
-    registCommand.call(self, Animation)
+    extendCommand.call(self, Animation)
 
     //所有的带bx-animation的节点
     var allAnimNode = $(self.options.el).find('[' + Constant.BX_ANIMATION_HOOK + ']')

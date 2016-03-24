@@ -5,20 +5,21 @@
  * @param  {[type]} compatEventName) {               var testNode [description]
  * @return {[type]}                  [description]
  */
+
 define([
   'jquery',
   'underscore',
   './animation/compatEventName',
-  './animation/registCommand',
+  './animation/extendCommand',
   // './animation/allDomEvents',
   './animation/initAnimation',
   './animation/constant'
-], function($, _, compatEventName, registCommand, /*allDomEvents,*/ initAnimation, Constant) {
+], function($, _, compatEventName, extendCommand, /*allDomEvents,*/ initAnimation, Constant) {
   /**
    * [Animation description]
    */
   function Animation(options) {
-    var self = this;
+    var self = this
 
     //配置
     this.options = $.extend(true, {
@@ -40,7 +41,7 @@ define([
     this._eventNamespace = '.' + (Math.random() + '').replace(/\D/g, '')
 
     //注册内建的命令
-    registCommand.call(self, Animation)
+    extendCommand.call(self, Animation)
 
     //所有的带bx-animation的节点
     var allAnimNode = $(self.options.el).find('[' + Constant.BX_ANIMATION_HOOK + ']')
