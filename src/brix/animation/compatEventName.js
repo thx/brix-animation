@@ -15,13 +15,19 @@ define([
   var transitionProperty = 'transition';
   var animationProperty = 'animation';
 
+  try { //dom未定义在ie8下会报错
+    var dom = dom
+  } catch (err) {
+    dom = null
+  }
+
   if (!('ontransitionend' in window)) {
     if ('onwebkittransitionend' in window) {
 
       // Chrome/Saf (+ Mobile Saf)/Android
       transitionEnd += ' webkitTransitionEnd';
       transitionProperty = 'webkitTransition'
-    } else if ('onotransitionend' in dom.tNode || navigator.appName === 'Opera') {
+    } else if ((dom && dom.tNode && 'onotransitionend' in dom.tNode) || navigator.appName === 'Opera') {
 
       // Opera
       transitionEnd += ' oTransitionEnd';
@@ -34,7 +40,7 @@ define([
       animationEnd += ' webkitAnimationEnd';
       animationProperty = 'webkitAnimation';
 
-    } else if ('onoanimationend' in dom.tNode) {
+    } else if (dom && dom.tNode && 'onoanimationend' in dom.tNode) {
       // Opera
       animationEnd += ' oAnimationEnd';
       animationProperty = 'oAnimation';
