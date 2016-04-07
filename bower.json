@@ -19,8 +19,7 @@
     "requirejs": "*",
     "jquery": "1.x.x",
     "underscore": "*",
-    "animate.css": "*",
-    "promise": "*"
+    "animate.css": "*"
   },
   "devDependencies": {}
 }
