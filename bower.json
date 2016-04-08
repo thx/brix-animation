@@ -9,6 +9,8 @@
     "node_modules",
     "bower_components",
     "src",
+    "docs",
+    "examples",
     "test",
     "doc",
     "demo.html",
