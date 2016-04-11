@@ -86,7 +86,7 @@ define('brix/animation/extendCommand',[
    * @return {[type]} [description]
    */
   function extendBuiltinCommand(Animation) {
-    var self = this
+    // var self = this
       //在事件触发时，需要清空已经添加上的样式名，回到初始化
     var addedClass = [] //已经添加的样式名数组
     var waitItv //setTimeout在on事件触发时被清除
@@ -102,7 +102,7 @@ define('brix/animation/extendCommand',[
       var done = step.done
       var index = step.index
       var $body = $(document.body)
-      var eventName = eventType + self._eventNamespace
+      var eventName = eventType + step.instance._eventNamespace
 
       // if (allDomEvents.indexOf(eventType) > -1) { //dom事件
       //事件代理到body根节点
@@ -122,8 +122,8 @@ define('brix/animation/extendCommand',[
         }
       })
 
-      if (_.indexOf(self._delegateEvents, eventName) === -1) {
-        self._delegateEvents.push(eventName)
+      if (_.indexOf(step.instance._delegateEvents, eventName) === -1) {
+        step.instance._delegateEvents.push(eventName)
       }
       // }
     })
@@ -138,7 +138,7 @@ define('brix/animation/extendCommand',[
       var param = $.trim(step.param)
       var node = step.node
       var done = step.done
-      var owner = self.options.owner //执行方法的宿主
+      var owner = step.instance.options.owner //执行方法的宿主
 
       //解析方法&参数
       // testclick(1,2,3)
@@ -203,7 +203,7 @@ define('brix/animation/extendCommand',[
       var done = step.done
 
       //触发自定义的事件
-      self._customEmits[param].done()
+      step.instance._customEmits[param].done()
 
       //
       done(event)
@@ -373,6 +373,7 @@ define('brix/animation/initAnimation',[
       var commandName = $.trim(command.split(':')[0])
       var commandValue = $.trim(command.split(':')[1])
       var step = {
+        instance: self, //当前动画实例
         command: commandName,
         node: node, //当前动画的节点
         index: i, //动画序列
@@ -425,7 +426,7 @@ define('brix/animation/initAnimation',[
       //     - 不必再枚举dom所有事件
       // if (step.command === 'on' && allDomEvents.indexOf(step.param) === -1) {
       if (step.command === 'when') {
-        self._customEmits[step.param] = step
+        step.instance._customEmits[step.param] = step
       }
     })
 
@@ -479,7 +480,7 @@ define('brix/animation',[
     this._eventNamespace = '.' + (Math.random() + '').replace(/\D/g, '')
 
     //注册内建的命令
-    extendCommand.call(self, Animation)
+    extendCommand(Animation)
 
     //所有的带bx-animation的节点
     var allAnimNode = $(self.options.el).find('[' + Constant.BX_ANIMATION_HOOK + ']')
