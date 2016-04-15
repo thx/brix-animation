@@ -75,15 +75,21 @@ define([
     /**
      * 将所有on自定义事件储存起来，等待触发
      */
-    commands.forEach(function(item, i) {
+    _.each(commands, function(item, i) {
       var step = getStep(item, i)
 
       //when命令缓存起来等待emit触发
       // ps: 不再共用on命令
       //     - 不必再枚举dom所有事件
       // if (step.command === 'on' && allDomEvents.indexOf(step.param) === -1) {
+      // when可能存在多个相同的触发事件，_customEmits改为数组
       if (step.command === 'when') {
-        step.instance._customEmits[step.param] = step
+        var _customEmit = step.instance._customEmits[step.param]
+        if (_customEmit) {
+          _customEmit.push(step)
+        } else {
+          _customEmit = [step]
+        }
       }
     })
 

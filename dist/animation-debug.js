@@ -210,7 +210,9 @@ define('brix/animation/extendCommand',[
 
       _.each(whenNames, function(name) {
         //触发自定义的事件
-        step.instance._customEmits[name].done()
+        _.each(step.instance._customEmits[name], function(emit) {
+          emit.done()
+        })
       })
 
       //

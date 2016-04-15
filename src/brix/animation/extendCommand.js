@@ -44,7 +44,7 @@ define([
 
           //清空附加上的class，初始化
           console.log(addedClass)
-          addedClass.forEach(function(item, i) {
+          _.each(addedClass, function(item) {
             node.removeClass(item)
           })
           addedClass = []
@@ -141,7 +141,9 @@ define([
 
       _.each(whenNames, function(name) {
         //触发自定义的事件
-        step.instance._customEmits[name].done()
+        _.each(step.instance._customEmits[name], function(emit) {
+          emit.done()
+        })
       })
 
       //
