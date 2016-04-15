@@ -41,7 +41,7 @@ define([
     this._eventNamespace = '.' + (Math.random() + '').replace(/\D/g, '')
 
     //注册内建的命令
-    extendCommand.call(self, Animation)
+    extendCommand(Animation)
 
     //所有的带bx-animation的节点
     var allAnimNode = $(self.options.el).find('[' + Constant.BX_ANIMATION_HOOK + ']')

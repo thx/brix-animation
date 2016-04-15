@@ -1,6 +1,6 @@
 {
   "name": "brix-animation",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": [
     "dist/animation.js"
   ],
@@ -9,6 +9,8 @@
     "node_modules",
     "bower_components",
     "src",
+    "docs",
+    "examples",
     "test",
     "doc",
     "demo.html",
@@ -18,9 +20,7 @@
   "dependencies": {
     "requirejs": "*",
     "jquery": "1.x.x",
-    "underscore": "*",
-    "animate.css": "*",
-    "promise": "*"
+    "underscore": "*"
   },
   "devDependencies": {}
 }

@@ -30,6 +30,7 @@ define([
       var commandName = $.trim(command.split(':')[0])
       var commandValue = $.trim(command.split(':')[1])
       var step = {
+        instance: self, //当前动画实例
         command: commandName,
         node: node, //当前动画的节点
         index: i, //动画序列
@@ -82,7 +83,7 @@ define([
       //     - 不必再枚举dom所有事件
       // if (step.command === 'on' && allDomEvents.indexOf(step.param) === -1) {
       if (step.command === 'when') {
-        self._customEmits[step.param] = step
+        step.instance._customEmits[step.param] = step
       }
     })
 

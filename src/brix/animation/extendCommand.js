@@ -17,7 +17,7 @@ define([
    * @return {[type]} [description]
    */
   function extendBuiltinCommand(Animation) {
-    var self = this
+    // var self = this
       //在事件触发时，需要清空已经添加上的样式名，回到初始化
     var addedClass = [] //已经添加的样式名数组
     var waitItv //setTimeout在on事件触发时被清除
@@ -33,7 +33,7 @@ define([
       var done = step.done
       var index = step.index
       var $body = $(document.body)
-      var eventName = eventType + self._eventNamespace
+      var eventName = eventType + step.instance._eventNamespace
 
       // if (allDomEvents.indexOf(eventType) > -1) { //dom事件
       //事件代理到body根节点
@@ -53,8 +53,8 @@ define([
         }
       })
 
-      if (_.indexOf(self._delegateEvents, eventName) === -1) {
-        self._delegateEvents.push(eventName)
+      if (_.indexOf(step.instance._delegateEvents, eventName) === -1) {
+        step.instance._delegateEvents.push(eventName)
       }
       // }
     })
@@ -69,7 +69,7 @@ define([
       var param = $.trim(step.param)
       var node = step.node
       var done = step.done
-      var owner = self.options.owner //执行方法的宿主
+      var owner = step.instance.options.owner //执行方法的宿主
 
       //解析方法&参数
       // testclick(1,2,3)
@@ -123,8 +123,10 @@ define([
       }
     })
 
+
     /**
      * 触发指定的when事件 emit/when
+     * 可以指定触发多个when事件，以逗号分隔
      * @param  {[type]} step) {                     } [description]
      * @return {[type]}       [description]
      */
@@ -133,12 +135,20 @@ define([
       var node = step.node
       var done = step.done
 
-      //触发自定义的事件
-      self._customEmits[param].done()
+      var whenNames = _.map(param.split(','), function(item) {
+        return $.trim(item)
+      })
+
+      _.each(whenNames, function(name) {
+        //触发自定义的事件
+        step.instance._customEmits[name].done()
+      })
 
       //
       done(event)
     })
+
+
 
 
     /**
