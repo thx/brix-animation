@@ -84,11 +84,10 @@ define([
       // if (step.command === 'on' && allDomEvents.indexOf(step.param) === -1) {
       // when可能存在多个相同的触发事件，_customEmits改为数组
       if (step.command === 'when') {
-        var _customEmit = step.instance._customEmits[step.param]
-        if (_customEmit) {
-          _customEmit.push(step)
+        if (step.instance._customEmits[step.param]) {
+          step.instance._customEmits[step.param].push(step)
         } else {
-          _customEmit = [step]
+          step.instance._customEmits[step.param] = [step]
         }
       }
     })

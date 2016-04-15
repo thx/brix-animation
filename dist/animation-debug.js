@@ -113,7 +113,7 @@ define('brix/animation/extendCommand',[
 
           //清空附加上的class，初始化
           console.log(addedClass)
-          addedClass.forEach(function(item, i) {
+          _.each(addedClass, function(item) {
             node.removeClass(item)
           })
           addedClass = []
@@ -430,15 +430,20 @@ define('brix/animation/initAnimation',[
     /**
      * 将所有on自定义事件储存起来，等待触发
      */
-    commands.forEach(function(item, i) {
+    _.each(commands, function(item, i) {
       var step = getStep(item, i)
 
       //when命令缓存起来等待emit触发
       // ps: 不再共用on命令
       //     - 不必再枚举dom所有事件
       // if (step.command === 'on' && allDomEvents.indexOf(step.param) === -1) {
+      // when可能存在多个相同的触发事件，_customEmits改为数组
       if (step.command === 'when') {
-        step.instance._customEmits[step.param] = step
+        if (step.instance._customEmits[step.param]) {
+          step.instance._customEmits[step.param].push(step)
+        } else {
+          step.instance._customEmits[step.param] = [step]
+        }
       }
     })
 
