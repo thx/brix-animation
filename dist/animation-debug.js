@@ -192,8 +192,10 @@ define('brix/animation/extendCommand',[
       }
     })
 
+
     /**
      * 触发指定的when事件 emit/when
+     * 可以指定触发多个when事件，以逗号分隔
      * @param  {[type]} step) {                     } [description]
      * @return {[type]}       [description]
      */
@@ -202,12 +204,20 @@ define('brix/animation/extendCommand',[
       var node = step.node
       var done = step.done
 
-      //触发自定义的事件
-      step.instance._customEmits[param].done()
+      var whenNames = _.map(param.split(','), function(item) {
+        return $.trim(item)
+      })
+
+      _.each(whenNames, function(name) {
+        //触发自定义的事件
+        step.instance._customEmits[name].done()
+      })
 
       //
       done(event)
     })
+
+
 
 
     /**
