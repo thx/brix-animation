@@ -18,7 +18,7 @@ define([
    */
   function extendBuiltinCommand(Animation) {
     // var self = this
-      //在事件触发时，需要清空已经添加上的样式名，回到初始化
+    //在事件触发时，需要清空已经添加上的样式名，回到初始化
     var addedClass = [] //已经添加的样式名数组
     var waitItv //setTimeout在on事件触发时被清除
 
@@ -29,34 +29,33 @@ define([
      */
     Animation.extend('on', function(step) {
       var eventType = step.param
-      var node = step.node
+      // var node = step.node
       var done = step.done
       var index = step.index
       var $body = $(document.body)
       var eventName = eventType + step.instance._eventNamespace
 
-      // if (allDomEvents.indexOf(eventType) > -1) { //dom事件
       //事件代理到body根节点
       $body.on(eventName, '[' + Constant.BX_ANIMATION_HOOK + ']', function(e) {
-        if (node[0] === e.currentTarget) { //事件到了当前节点
-          //on事件时清除setTimeout
-          clearTimeout(waitItv)
+        var _node = $(this)
+        // if (node[0] === e.currentTarget) { //事件到了当前节点
+        //on事件时清除setTimeout
+        clearTimeout(waitItv)
 
-          //清空附加上的class，初始化
-          console.log(addedClass)
-          _.each(addedClass, function(item) {
-            node.removeClass(item)
-          })
-          addedClass = []
+        //清空附加上的class，初始化
+        console.log(addedClass)
+        _.each(addedClass, function(item) {
+          _node.removeClass(item)
+        })
+        addedClass = []
 
-          done(e, index)
-        }
+        done(e, index)
+          // }
       })
 
       if (_.indexOf(step.instance._delegateEvents, eventName) === -1) {
         step.instance._delegateEvents.push(eventName)
       }
-      // }
     })
 
     /**
@@ -94,7 +93,7 @@ define([
       //
       event = event || {}
       event.node = node //event挂载上当前node节点
-      //加上事件event
+        //加上事件event
       params.unshift(event)
 
       if (parseExecuteReg) {
@@ -149,7 +148,6 @@ define([
       //
       done(event)
     })
-
 
 
 
