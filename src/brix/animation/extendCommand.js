@@ -29,7 +29,7 @@ define([
      */
     Animation.extend('on', function(step) {
       var eventType = step.param
-      // var node = step.node
+        // var node = step.node
       var done = step.done
       var index = step.index
       var $body = $(document.body)
@@ -37,20 +37,20 @@ define([
 
       //事件代理到body根节点
       $body.on(eventName, '[' + Constant.BX_ANIMATION_HOOK + ']', function(e) {
-        var _node = $(this)
-        // if (node[0] === e.currentTarget) { //事件到了当前节点
-        //on事件时清除setTimeout
-        clearTimeout(waitItv)
 
-        //清空附加上的class，初始化
-        console.log(addedClass)
-        _.each(addedClass, function(item) {
-          _node.removeClass(item)
-        })
-        addedClass = []
+        if (node[0] === e.currentTarget) {
+            //on事件时清除setTimeout
+          clearTimeout(waitItv)
 
-        done(e, index)
-          // }
+          //清空附加上的class，初始化
+          console.log(addedClass)
+          _.each(addedClass, function(item) {
+            node.removeClass(item)
+          })
+          addedClass = []
+
+          done(e, index)
+        }
       })
 
       if (_.indexOf(step.instance._delegateEvents, eventName) === -1) {
