@@ -5,7 +5,6 @@
  * @param  {[type]} compatEventName) {               var testNode [description]
  * @return {[type]}                  [description]
  */
-
 define([
   'jquery',
   'underscore',

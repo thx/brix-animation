@@ -457,7 +457,6 @@ define('brix/animation/initAnimation',[
  * @param  {[type]} compatEventName) {               var testNode [description]
  * @return {[type]}                  [description]
  */
-
 define('brix/animation',[
   'jquery',
   'underscore',
