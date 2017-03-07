@@ -10,14 +10,14 @@
     "@ali/alimama-deploy": "^0.1.16"
   },
   "devDependencies": {
-    "gulp": "*",
+    "gulp": "^3.9.1",
     "gulp-connect": "^2.2.0",
     "gulp-jshint": "^2.0.4",
-    "gulp-less": "",
-    "gulp-requirejs": "",
+    "gulp-less": "^3.3.0",
+    "gulp-requirejs": "^1.0.0-rc1",
     "gulp-uglify": "^1.2.0",
     "jshint": "^2.9.4",
-    "jshint-stylish": "*",
+    "jshint-stylish": "^2.2.1",
     "through2": "^0.6.5",
     "webpack": "^1.12.9"
   },
