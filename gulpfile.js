@@ -13,6 +13,7 @@ var path = require('path');
 var globs = ['src/**/*.js', 'docs/less/**/*.less']
     // var watchTasks = ['hello', 'madge', 'jshint', 'rjs', 'compress', 'test']
 var watchTasks = ['hello', 'ex-compress', 'ex-rjs' /*, 'less'*/ ]
+var deploy = require('@ali/alimama-deploy')
 
 gulp.task('hello', function() {
     console.log((function() {
@@ -71,32 +72,11 @@ gulp.task('watch', function( /*callback*/ ) {
     gulp.watch(globs, watchTasks)
 })
 
-// https://github.com/mrhooray/gulp-mocha-phantomjs
-// gulp.task('test', function() {
-//     return gulp.src('test/*.html')
-//         .pipe(mochaPhantomJS({
-//             reporter: 'spec'
-//         }))
-// })
-
 // https://github.com/terinjokes/gulp-uglify
 gulp.task('ex-compress', function() {
-    // gulp.src(['dist/**-debug.js'])
-    //     .pipe(uglify())
-    //     .pipe(gulp.dest('dist/'))
-
-    // gulp.src(['dist/**.js','!dist/**-debug.js'])
-    //     .pipe(through.obj(function(file, encoding, callback) { /* jshint unused:false */
-    //         file.path = file.path.replace(
-    //             '.js',
-    //             '-debug.js'
-    //         )
-    //         callback(null, file)
-    //     }))
-    //     .pipe(gulp.dest('dist/'))
     gulp.src(['dist/**-debug.js'])
         .pipe(uglify())
-            .pipe(through.obj(function(file, encoding, callback) { /* jshint unused:false */
+        .pipe(through.obj(function(file, encoding, callback) { /* jshint unused:false */
             file.path = file.path.replace(
                 '-debug.js',
                 '.js'
@@ -147,4 +127,17 @@ gulp.task('less', function() {
             paths: [path.join(__dirname, 'less', 'includes')]
         }))
         .pipe(gulp.dest('./docs/less'));
+})
+
+
+gulp.task('daily', function() {
+    deploy.daily({
+        buildName: false //指定执行的压缩命令
+    })
+})
+
+gulp.task('publish', function() {
+    deploy.publish({
+        buildName: false //指定执行的压缩命令
+    })
 })

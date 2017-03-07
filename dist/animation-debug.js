@@ -1,4 +1,3 @@
-
 /**
  * 兼容性动画事件名
  * @param  {[type]} $  [description]
