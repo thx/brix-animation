@@ -8,10 +8,10 @@
 define([
   'jquery',
   'underscore',
-  // './allDomEvents',
   './compatEventName',
   './constant'
-], function($, _, /*allDomEvents,*/ compatEventName, Constant) {
+], function($, _, compatEventName, Constant) {
+
   /**
    * 注册内建的命令
    * @return {[type]} [description]
@@ -29,7 +29,7 @@ define([
      */
     Animation.extend('on', function(step) {
       var eventType = step.param
-        // var node = step.node
+      var node = step.node
       var done = step.done
       var index = step.index
       var $body = $(document.body)
@@ -39,7 +39,7 @@ define([
       $body.on(eventName, '[' + Constant.BX_ANIMATION_HOOK + ']', function(e) {
 
         if (node[0] === e.currentTarget) {
-            //on事件时清除setTimeout
+          //on事件时清除setTimeout
           clearTimeout(waitItv)
 
           //清空附加上的class，初始化
