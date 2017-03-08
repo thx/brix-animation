@@ -16,7 +16,7 @@ define([
    * 注册内建的命令
    * @return {[type]} [description]
    */
-  function extendBuiltinCommand(Animation) {
+  function extendCommand(Animation) {
     // var self = this
     //在事件触发时，需要清空已经添加上的样式名，回到初始化
     var addedClass = [] //已经添加的样式名数组
@@ -161,7 +161,7 @@ define([
       var param = step.param
       var node = step.node
       var done = step.done
-
+      var eventNamespace = step.instance._eventNamespace
       var isAnimEndCallback = false
 
       /**
@@ -178,8 +178,8 @@ define([
 
       node.addClass(className)
       addedClass.push(className)
-      node.off(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE)
+      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(compatEventName.transitionEnd + eventNamespace)
 
       if (mode === '3') { //普通无动画的class，直接执行done
         done(event)
@@ -197,8 +197,8 @@ define([
         }
 
         //动画结束
-        node.on(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
-        node.on(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
+        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
+        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
       }
     })
 
@@ -230,6 +230,7 @@ define([
       var done = step.done
       var pairs = step.param.split(',')
       var styles = []
+      var eventNamespace = step.instance._eventNamespace
       var mode = '1'
       var isAnimEndCallback = false
 
@@ -252,8 +253,8 @@ define([
         node.css(style.name, style.value)
       })
 
-      node.off(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE)
+      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(compatEventName.transitionEnd + eventNamespace)
 
       if (mode === '3') { //没有动画效果的样式
         done(event)
@@ -272,12 +273,12 @@ define([
           done(event)
         }
 
-        node.on(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
-        node.on(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
+        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
+        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
       }
     })
 
   }
 
-  return extendBuiltinCommand
+  return extendCommand
 })

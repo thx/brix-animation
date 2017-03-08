@@ -4,7 +4,7 @@
  * @param  {[type]} _) {}          [description]
  * @return {[type]}    [description]
  */
-define('brix/animation/compatEventName',[
+define('brix/compatEventName',[
   'jquery',
   'underscore'
 ], function($, _) {
@@ -57,10 +57,9 @@ define('brix/animation/compatEventName',[
 /**
  * 常量
  */
-define('brix/animation/constant',[], function() {
+define('brix/constant',[], function() {
   return {
-    BX_ANIMATION_HOOK: 'bx-animation', //配置钩子
-    BX_ANIMATION_NAMESPACE: '.' + (Math.random() + '').replace(/\D/g, '') //事件命名空间
+    BX_ANIMATION_HOOK: 'bx-animation' //配置钩子
   }
 })
 ;
@@ -71,7 +70,7 @@ define('brix/animation/constant',[], function() {
  * @param  {[type]} render: function()    {                                var   self        [description]
  * @return {[type]}         [description]
  */
-define('brix/animation/extendCommand',[
+define('brix/extendCommand',[
   'jquery',
   'underscore',
   './compatEventName',
@@ -82,7 +81,7 @@ define('brix/animation/extendCommand',[
    * 注册内建的命令
    * @return {[type]} [description]
    */
-  function extendBuiltinCommand(Animation) {
+  function extendCommand(Animation) {
     // var self = this
     //在事件触发时，需要清空已经添加上的样式名，回到初始化
     var addedClass = [] //已经添加的样式名数组
@@ -227,7 +226,7 @@ define('brix/animation/extendCommand',[
       var param = step.param
       var node = step.node
       var done = step.done
-
+      var eventNamespace = step.instance._eventNamespace
       var isAnimEndCallback = false
 
       /**
@@ -244,8 +243,8 @@ define('brix/animation/extendCommand',[
 
       node.addClass(className)
       addedClass.push(className)
-      node.off(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE)
+      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(compatEventName.transitionEnd + eventNamespace)
 
       if (mode === '3') { //普通无动画的class，直接执行done
         done(event)
@@ -263,8 +262,8 @@ define('brix/animation/extendCommand',[
         }
 
         //动画结束
-        node.on(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
-        node.on(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
+        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
+        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
       }
     })
 
@@ -296,6 +295,7 @@ define('brix/animation/extendCommand',[
       var done = step.done
       var pairs = step.param.split(',')
       var styles = []
+      var eventNamespace = step.instance._eventNamespace
       var mode = '1'
       var isAnimEndCallback = false
 
@@ -318,8 +318,8 @@ define('brix/animation/extendCommand',[
         node.css(style.name, style.value)
       })
 
-      node.off(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE)
+      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(compatEventName.transitionEnd + eventNamespace)
 
       if (mode === '3') { //没有动画效果的样式
         done(event)
@@ -338,14 +338,14 @@ define('brix/animation/extendCommand',[
           done(event)
         }
 
-        node.on(compatEventName.transitionEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
-        node.on(compatEventName.animationEnd + Constant.BX_ANIMATION_NAMESPACE, animateEnd)
+        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
+        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
       }
     })
 
   }
 
-  return extendBuiltinCommand
+  return extendCommand
 });
 /**
  * 初始化每个节点的动画配置
@@ -353,7 +353,7 @@ define('brix/animation/extendCommand',[
  * @param  {[type]} Loader)      {               function initAnimation(node) {    var self [description]
  * @return {[type]}              [description]
  */
-define('brix/animation/initAnimation',[
+define('brix/initAnimation',[
   './constant'
 ], function(Constant) {
 
@@ -452,18 +452,14 @@ define('brix/animation/initAnimation',[
  * @param  {[type]} _                [description]
  * @return {[type]}                  [description]
  */
+
 define('brix/animation',[
   'jquery',
   'underscore',
-  './animation/extendCommand',
-  './animation/initAnimation',
-  './animation/constant'
+  './extendCommand',
+  './initAnimation',
+  './constant'
 ], function($, _, extendCommand, initAnimation, Constant) {
-
-  var constant = {
-    BX_ANIMATION_HOOK: 'bx-animation', //配置钩子
-    BX_ANIMATION_NAMESPACE: '.' + (Math.random() + '').replace(/\D/g, '') //事件命名空间
-  }
 
   /**
    * [Animation description]

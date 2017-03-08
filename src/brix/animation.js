@@ -4,18 +4,14 @@
  * @param  {[type]} _                [description]
  * @return {[type]}                  [description]
  */
+
 define([
   'jquery',
   'underscore',
-  './animation/extendCommand',
-  './animation/initAnimation',
-  './animation/constant'
+  './extendCommand',
+  './initAnimation',
+  './constant'
 ], function($, _, extendCommand, initAnimation, Constant) {
-
-  var constant = {
-    BX_ANIMATION_HOOK: 'bx-animation', //配置钩子
-    BX_ANIMATION_NAMESPACE: '.' + (Math.random() + '').replace(/\D/g, '') //事件命名空间
-  }
 
   /**
    * [Animation description]
