@@ -5,9 +5,8 @@
  * @return {[type]}              [description]
  */
 define([
-  // './allDomEvents',
   './constant'
-], function( /*allDomEvents,*/ Constant) {
+], function(Constant) {
 
   /**
    * 解析bx-animation配置，挨个执行命令
@@ -15,7 +14,7 @@ define([
    *   - 分号分隔
    * @param  {dom} node 当前节点
    */
-  function initAnimation(node, Animation) {
+  function initAnimation(Animation, node) {
     var self = this
     var commands = node.attr(Constant.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
 
@@ -24,7 +23,7 @@ define([
       commands.pop()
     }
 
-    //
+    // 返回命令function里的step，包含当前步骤的关键信息
     function getStep(item, i) {
       var command = $.trim(item) //trim处理下前后空格
       var commandName = $.trim(command.split(':')[0])
@@ -73,7 +72,7 @@ define([
     }
 
     /**
-     * 将所有on自定义事件储存起来，等待触发
+     * 将所有when自定义事件储存起来，等待触发
      */
     _.each(commands, function(item, i) {
       var step = getStep(item, i)

@@ -1,7 +1,5 @@
 /**
  * 常量
- * @param  {[type]} ) {             return {    BX_ANIMATION_HOOK: 'bx-animation',     BX_ANIMATION_NAMESPACE: '.' + (Math.random() + '').replace(/D/g, '')   }} [description]
- * @return {[type]}   [description]
  */
 define([], function() {
   return {

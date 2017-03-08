@@ -56,8 +56,6 @@ define('brix/animation/compatEventName',[
 });
 /**
  * 常量
- * @param  {[type]} ) {             return {    BX_ANIMATION_HOOK: 'bx-animation',     BX_ANIMATION_NAMESPACE: '.' + (Math.random() + '').replace(/D/g, '')   }} [description]
- * @return {[type]}   [description]
  */
 define('brix/animation/constant',[], function() {
   return {
@@ -76,10 +74,10 @@ define('brix/animation/constant',[], function() {
 define('brix/animation/extendCommand',[
   'jquery',
   'underscore',
-  // './allDomEvents',
   './compatEventName',
   './constant'
-], function($, _, /*allDomEvents,*/ compatEventName, Constant) {
+], function($, _, compatEventName, Constant) {
+
   /**
    * 注册内建的命令
    * @return {[type]} [description]
@@ -97,7 +95,7 @@ define('brix/animation/extendCommand',[
      */
     Animation.extend('on', function(step) {
       var eventType = step.param
-        // var node = step.node
+      var node = step.node
       var done = step.done
       var index = step.index
       var $body = $(document.body)
@@ -107,7 +105,7 @@ define('brix/animation/extendCommand',[
       $body.on(eventName, '[' + Constant.BX_ANIMATION_HOOK + ']', function(e) {
 
         if (node[0] === e.currentTarget) {
-            //on事件时清除setTimeout
+          //on事件时清除setTimeout
           clearTimeout(waitItv)
 
           //清空附加上的class，初始化
@@ -356,9 +354,8 @@ define('brix/animation/extendCommand',[
  * @return {[type]}              [description]
  */
 define('brix/animation/initAnimation',[
-  // './allDomEvents',
   './constant'
-], function( /*allDomEvents,*/ Constant) {
+], function(Constant) {
 
   /**
    * 解析bx-animation配置，挨个执行命令
@@ -366,7 +363,7 @@ define('brix/animation/initAnimation',[
    *   - 分号分隔
    * @param  {dom} node 当前节点
    */
-  function initAnimation(node, Animation) {
+  function initAnimation(Animation, node) {
     var self = this
     var commands = node.attr(Constant.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
 
@@ -375,7 +372,7 @@ define('brix/animation/initAnimation',[
       commands.pop()
     }
 
-    //
+    // 返回命令function里的step，包含当前步骤的关键信息
     function getStep(item, i) {
       var command = $.trim(item) //trim处理下前后空格
       var commandName = $.trim(command.split(':')[0])
@@ -424,7 +421,7 @@ define('brix/animation/initAnimation',[
     }
 
     /**
-     * 将所有on自定义事件储存起来，等待触发
+     * 将所有when自定义事件储存起来，等待触发
      */
     _.each(commands, function(item, i) {
       var step = getStep(item, i)
@@ -448,24 +445,26 @@ define('brix/animation/initAnimation',[
   }
 
   return initAnimation
-})
-;
+});
 /**
  * 主菜
  * @param  {[type]} $                [description]
  * @param  {[type]} _                [description]
- * @param  {[type]} compatEventName) {               var testNode [description]
  * @return {[type]}                  [description]
  */
 define('brix/animation',[
   'jquery',
   'underscore',
-  './animation/compatEventName',
   './animation/extendCommand',
-  // './animation/allDomEvents',
   './animation/initAnimation',
   './animation/constant'
-], function($, _, compatEventName, extendCommand, /*allDomEvents,*/ initAnimation, Constant) {
+], function($, _, extendCommand, initAnimation, Constant) {
+
+  var constant = {
+    BX_ANIMATION_HOOK: 'bx-animation', //配置钩子
+    BX_ANIMATION_NAMESPACE: '.' + (Math.random() + '').replace(/\D/g, '') //事件命名空间
+  }
+
   /**
    * [Animation description]
    */
@@ -499,11 +498,10 @@ define('brix/animation',[
 
     //各节点进行动画绑定
     _.each(allAnimNode, function(node, i) {
-
       //解析bx-animation配置
-      initAnimation.call(self, $(node), Animation)
-
+      initAnimation.call(self, Animation, $(node))
     })
+
   }
 
 
@@ -536,20 +534,6 @@ define('brix/animation',[
       })
     }
 
-    /**
-     * 注册自定义的命令
-     * @param  {[type]}   name 命令名称
-     * @param  {Function} fn   命令函数体
-     *  function (step) {}
-     *      step {object}
-     *          step.node //当前节点
-     *          step.index //命令的index
-     *          step.param //命令的参数
-     *          step.done //执行完命令后的回调函数，会顺序调用接下来的命令
-     */
-    // extend: function(name, fn) {
-    //   this._builtinCommands[name] = fn
-    // }
   }
 
   return Animation

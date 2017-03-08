@@ -2,18 +2,21 @@
  * 主菜
  * @param  {[type]} $                [description]
  * @param  {[type]} _                [description]
- * @param  {[type]} compatEventName) {               var testNode [description]
  * @return {[type]}                  [description]
  */
 define([
   'jquery',
   'underscore',
-  './animation/compatEventName',
   './animation/extendCommand',
-  // './animation/allDomEvents',
   './animation/initAnimation',
   './animation/constant'
-], function($, _, compatEventName, extendCommand, /*allDomEvents,*/ initAnimation, Constant) {
+], function($, _, extendCommand, initAnimation, Constant) {
+
+  var constant = {
+    BX_ANIMATION_HOOK: 'bx-animation', //配置钩子
+    BX_ANIMATION_NAMESPACE: '.' + (Math.random() + '').replace(/\D/g, '') //事件命名空间
+  }
+
   /**
    * [Animation description]
    */
@@ -47,11 +50,10 @@ define([
 
     //各节点进行动画绑定
     _.each(allAnimNode, function(node, i) {
-
       //解析bx-animation配置
-      initAnimation.call(self, $(node), Animation)
-
+      initAnimation.call(self, Animation, $(node))
     })
+
   }
 
 
@@ -84,20 +86,6 @@ define([
       })
     }
 
-    /**
-     * 注册自定义的命令
-     * @param  {[type]}   name 命令名称
-     * @param  {Function} fn   命令函数体
-     *  function (step) {}
-     *      step {object}
-     *          step.node //当前节点
-     *          step.index //命令的index
-     *          step.param //命令的参数
-     *          step.done //执行完命令后的回调函数，会顺序调用接下来的命令
-     */
-    // extend: function(name, fn) {
-    //   this._builtinCommands[name] = fn
-    // }
   }
 
   return Animation
