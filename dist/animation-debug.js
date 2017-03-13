@@ -4,7 +4,7 @@
  * @param  {[type]} _) {}          [description]
  * @return {[type]}    [description]
  */
-define('brix/compatEventName',[
+define('compatEventName',[
   'jquery',
   'underscore'
 ], function($, _) {
@@ -57,7 +57,7 @@ define('brix/compatEventName',[
 /**
  * 常量
  */
-define('brix/constant',[], function() {
+define('constant',[], function() {
   return {
     BX_ANIMATION_HOOK: 'bx-animation' //配置钩子
   }
@@ -70,7 +70,7 @@ define('brix/constant',[], function() {
  * @param  {[type]} render: function()    {                                var   self        [description]
  * @return {[type]}         [description]
  */
-define('brix/extendCommand',[
+define('extendCommand',[
   'jquery',
   'underscore',
   './compatEventName',
@@ -146,17 +146,8 @@ define('brix/extendCommand',[
       node.isAnimating = true
 
       if (execute[2]) {
-        params = $.trim(/\((.+)\)/.exec(execute[2])[1]).split(/\s*\,\s*/)
+        params = eval( '([' + $.trim(/\((.+)\)/.exec(execute[2])[1]) +'])' )
       }
-
-      //数据类型转化
-      _.each(params, function(item, i) {
-        try {
-          params[i] = eval('(' + item + ')')
-        } catch (err) {
-          throw 'execute传参格式错误: ' + err.message
-        }
-      })
 
       //
       event = event || {}
@@ -374,7 +365,7 @@ define('brix/extendCommand',[
  * @param  {[type]} Loader)      {               function initAnimation(node) {    var self [description]
  * @return {[type]}              [description]
  */
-define('brix/initAnimation',[
+define('initAnimation',[
   './constant'
 ], function(Constant) {
 
@@ -399,8 +390,7 @@ define('brix/initAnimation',[
       var commandExec = /^([^:]+)\:(.+)$/.exec(command)
 
       if (!commandExec || !commandExec[1] || !commandExec[2]) {
-        throw '命令格式错误，参考格式： on:click; execute:dosomething(); class:tada;'
-        return
+        return console.error('命令格式错误，参考格式： on:click; execute:dosomething(); class:tada;')
       }
 
       var commandName = $.trim(commandExec[1])
@@ -490,7 +480,7 @@ define('brix/initAnimation',[
  * @return {[type]}                  [description]
  */
 
-define('brix/animation',[
+define('animation',[
   'jquery',
   'underscore',
   './extendCommand',

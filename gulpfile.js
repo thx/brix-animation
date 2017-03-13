@@ -1,10 +1,11 @@
 /* global require, console */
 var gulp = require('gulp')
 var through = require('through2')
-// var connect = require('gulp-connect')
+    // var connect = require('gulp-connect')
 var jshint = require('gulp-jshint')
 var webpack = require("webpack")
 var rjs = require('gulp-requirejs')
+var requirejsOptimize = require('gulp-requirejs-optimize');
 var uglify = require('gulp-uglify')
     // var mochaPhantomJS = require('gulp-mocha-phantomjs')
 var exec = require('child_process').exec
@@ -54,17 +55,16 @@ gulp.task('jshint', function() {
 // https://github.com/RobinThrift/gulp-requirejs
 // http://requirejs.org/docs/optimization.html#empty
 gulp.task('ex-rjs', function() {
-    var build = {
-        baseUrl: 'src',
-        name: 'brix/animation',
-        out: 'dist/animation-debug.js',
-        paths: {
-            jquery: 'empty:',
-            underscore: 'empty:'
-        }
-    }
-    rjs(build)
-        .pipe(gulp.dest('.')) // pipe it to the output DIR
+    return gulp.src('src/animation.js')
+        .pipe(requirejsOptimize({
+            paths: {
+                "jquery": "empty:",
+                "underscore": "empty:"
+            },
+            out: 'animation-debug.js',
+            optimize: 'none'
+        }))
+        .pipe(gulp.dest('dist'))
 })
 
 // https://github.com/floatdrop/gulp-watch

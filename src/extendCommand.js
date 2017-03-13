@@ -81,17 +81,8 @@ define([
       node.isAnimating = true
 
       if (execute[2]) {
-        params = $.trim(/\((.+)\)/.exec(execute[2])[1]).split(/\s*\,\s*/)
+        params = eval( '([' + $.trim(/\((.+)\)/.exec(execute[2])[1]) +'])' )
       }
-
-      //数据类型转化
-      _.each(params, function(item, i) {
-        try {
-          params[i] = eval('(' + item + ')')
-        } catch (err) {
-          throw 'execute传参格式错误: ' + err.message
-        }
-      })
 
       //
       event = event || {}

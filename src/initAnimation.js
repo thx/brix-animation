@@ -29,7 +29,7 @@ define([
       var commandExec = /^([^:]+)\:(.+)$/.exec(command)
 
       if (!commandExec || !commandExec[1] || !commandExec[2]) {
-        return throw '命令格式错误，参考格式： on:click; execute:dosomething(); class:tada;'
+        return console.error('命令格式错误，参考格式： on:click; execute:dosomething(); class:tada;')
       }
 
       var commandName = $.trim(commandExec[1])

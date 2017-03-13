@@ -7,7 +7,7 @@
     <script type="text/javascript">
         require.config({
             paths: {
-                'brix/animation': '../../dist/animation-debug',
+                'animation': '../../dist/animation-debug',
                 jquery: '../../bower_components/jquery/dist/jquery',
                 promise: '../../bower_components/promise/promise',
                 underscore: '../../bower_components/underscore/underscore'
@@ -165,7 +165,7 @@
     on:click;
     class:drop-ball-zoom;
     wait:200;
-    execute:dropBall('400', true, {a:1}, [1], 300);
+    execute:dropBall('400', true, '1,2', {a:1}, [1], 300);
     call:text-changed,text-changed2;
     class:drop-ball-disappear,2;
     call: text-changed3;
@@ -219,7 +219,7 @@
   }
 
   require([
-    'brix/animation',
+    'animation',
     'jquery',
     'underscore'
   ], function(Anim, $, _) {
