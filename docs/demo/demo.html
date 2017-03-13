@@ -165,7 +165,7 @@
     on:click;
     class:drop-ball-zoom;
     wait:200;
-    execute:dropBall(400);
+    execute:dropBall('400', true, {a:1}, [1], 300);
     call:text-changed,text-changed2;
     class:drop-ball-disappear,2;
     call: text-changed3;

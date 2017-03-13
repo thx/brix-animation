@@ -87,7 +87,7 @@ define([
       //数据类型转化
       _.each(params, function(item, i) {
         try {
-          params[i] = eval(item)
+          params[i] = eval('(' + item + ')')
         } catch (err) {
           throw 'execute传参格式错误: ' + err.message
         }

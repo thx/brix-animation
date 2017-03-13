@@ -152,7 +152,7 @@ define('brix/extendCommand',[
       //数据类型转化
       _.each(params, function(item, i) {
         try {
-          params[i] = eval(item)
+          params[i] = eval('(' + item + ')')
         } catch (err) {
           throw 'execute传参格式错误: ' + err.message
         }
@@ -396,8 +396,16 @@ define('brix/initAnimation',[
     // 返回命令function里的step，包含当前步骤的关键信息
     function getStep(item, i) {
       var command = $.trim(item) //trim处理下前后空格
-      var commandName = $.trim(command.split(':')[0])
-      var commandValue = $.trim(command.split(':')[1])
+      var commandExec = /^([^:]+)\:(.+)$/.exec(command)
+
+      if (!commandExec || !commandExec[1] || !commandExec[2]) {
+        throw '命令格式错误，参考格式： on:click; execute:dosomething(); class:tada;'
+        return
+      }
+
+      var commandName = $.trim(commandExec[1])
+      var commandValue = $.trim(commandExec[2])
+
       var step = {
         instance: self, //当前动画实例
         command: commandName,
