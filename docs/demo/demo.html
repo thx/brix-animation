@@ -161,15 +161,29 @@
 </style>
 <div >
 
-  <div class="linkage-anim animated" style="left: 800px;" bx-animation="on:click; class:tada;">
-    test
-  </div>
+  <div class="drop-ball" bx-animation="
+    on:click;
+    class:drop-ball-zoom;
+    wait:200;
+    execute:dropBall(400);
+    call:text-changed,text-changed2;
+    class:drop-ball-disappear,2;
+    call: text-changed3;
+    call: text-changed4;
+  ">Click</div>
 
+  <div class="linkage-anim animated" bx-animation="
+    when:text-changed;
+    execute: test();
+    class:tada;
+    when:text-changed3;
+    class:shake;
+    wait:2000;
+    when:text-changed4;
+    class:wobble;
+  ">联动的动画元素</div>
 
-  <div class="drop-ball" bx-animation="on:click; class:drop-ball-zoom; wait:200; execute:dropBall(400); call:text-changed; class:drop-ball-disappear,2;">Click</div>
-  <div class="linkage-anim animated" bx-animation="when:text-changed; execute: test(); class:tada;">联动的动画元素</div>
   <div class="drop-ground"></div>
-
 </div>
 
     </div>

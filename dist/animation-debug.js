@@ -142,6 +142,9 @@ define('brix/extendCommand',[
       var func = execute[1]
       var params = []
 
+      //标识动画在进行中
+      node.isAnimating = true
+
       if (execute[2]) {
         params = $.trim(/\((.+)\)/.exec(execute[2])[1]).split(/\s*\,\s*/)
       }
@@ -171,6 +174,7 @@ define('brix/extendCommand',[
             isStop.then(function(param) {
               if (param !== false) { //函数返回false会中断动画流程
                 done(event)
+                node.isAnimating = false
               }
             })
           }
@@ -178,12 +182,14 @@ define('brix/extendCommand',[
           //如果return false，会中断后续动效
           else if (isStop !== false) {
             done(event)
+            node.isAnimating = false
           }
         } else {
           throw '方法：' + func + '不存在'
         }
       } else {
         done(event)
+        node.isAnimating = false
       }
     })
 
@@ -246,8 +252,13 @@ define('brix/extendCommand',[
       node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
       node.off(compatEventName.transitionEnd + eventNamespace)
 
+      //同个节点上多个when被触发时，有可能后面一个when触发时，前一个when动画还未结束，导致问题出现
+      //解决方案：后一个when触发时，如果前一个when未结束，则进入等待区，等前一个when动画结束，再执行
+      node.isAnimating = true //标识动画在进行中
+
       if (mode === '3') { //普通无动画的class，直接执行done
         done(event)
+        node.isAnimating = false
       } else { //有动画的transition/animation动画完成执行回调
         function animateEnd(e) { //callback
           if (isAnimEndCallback) { //只执行一次动画结束的回调
@@ -259,6 +270,7 @@ define('brix/extendCommand',[
             addedClass.splice(addedClass.indexOf(className), 1)
           }
           done(event)
+          node.isAnimating = false
         }
 
         //动画结束
@@ -275,8 +287,12 @@ define('brix/extendCommand',[
       var duration = step.param
       var done = step.done
 
+      //标识动画在进行中
+      node.isAnimating = true
+
       waitItv = setTimeout(function() {
         done(event)
+        node.isAnimating = false
       }, duration)
     })
 
@@ -298,6 +314,9 @@ define('brix/extendCommand',[
       var eventNamespace = step.instance._eventNamespace
       var mode = '1'
       var isAnimEndCallback = false
+
+      //标识动画在进行中
+      node.isAnimating = false
 
       if (!/\s+/.test($.trim(pairs[pairs.length - 1]))) {
         mode = $.trim(pairs.pop())
@@ -323,6 +342,7 @@ define('brix/extendCommand',[
 
       if (mode === '3') { //没有动画效果的样式
         done(event)
+        node.isAnimating = false
       } else {
 
         function animateEnd(e) { //callback
@@ -336,6 +356,7 @@ define('brix/extendCommand',[
             })
           }
           done(event)
+          node.isAnimating = false
         }
 
         node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
@@ -414,9 +435,17 @@ define('brix/initAnimation',[
 
       //执行命令代码
       if (!isWhiteCommand) {
-        setTimeout(function() { //setTimeout解决context环境问题
+        if (!step.node.isAnimating) {
           builtinCommand(step, event)
-        }, 0)
+        } else {
+          //如果前一个动画还未结束，则等待
+          var itv = setInterval(function() {
+            if (!step.node.isAnimating) {
+              clearInterval(itv)
+              builtinCommand(step, event)
+            }
+          }, 10)
+        }
       }
     }
 

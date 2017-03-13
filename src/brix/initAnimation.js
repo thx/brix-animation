@@ -65,9 +65,17 @@ define([
 
       //执行命令代码
       if (!isWhiteCommand) {
-        setTimeout(function() { //setTimeout解决context环境问题
+        if (!step.node.isAnimating) {
           builtinCommand(step, event)
-        }, 0)
+        } else {
+          //如果前一个动画还未结束，则等待
+          var itv = setInterval(function() {
+            if (!step.node.isAnimating) {
+              clearInterval(itv)
+              builtinCommand(step, event)
+            }
+          }, 10)
+        }
       }
     }
 
