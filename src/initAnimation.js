@@ -19,21 +19,21 @@ define([
     var commands = node.attr(Constant.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
 
     //去掉;结尾导致数组多余的一个空值
-    if ($.trim(commands[commands.length - 1]) === '') {
+    if (commands[commands.length - 1].trim() === '') {
       commands.pop()
     }
 
     // 返回命令function里的step，包含当前步骤的关键信息
     function getStep(item, i) {
-      var command = $.trim(item) //trim处理下前后空格
+      var command = item.trim() //trim处理下前后空格
       var commandExec = /^([^:]+)\:(.+)$/.exec(command)
 
       if (!commandExec || !commandExec[1] || !commandExec[2]) {
         return console.error('命令格式错误，参考格式： on:click; execute:dosomething(); class:tada;')
       }
 
-      var commandName = $.trim(commandExec[1])
-      var commandValue = $.trim(commandExec[2])
+      var commandName = commandExec[1].trim()
+      var commandValue = commandExec[2].trim()
 
       var step = {
         instance: self, //当前动画实例

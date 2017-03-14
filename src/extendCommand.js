@@ -27,8 +27,9 @@ define([
      *   2: 重复点击事件需等待动画结束；
      */
     Animation.extend('on', function(step) {
-      var eventType = $.trim(step.param.split(',')[0])
-      var eventMode = $.trim(step.param.split(',')[1]) //1(默认)：重复点击事件直接重置动画；2：重复点击事件需等待动画结束；
+      var eventParse = step.param.split(',')
+      var eventType = eventParse[0].trim()
+      var eventMode = eventParse[1] && eventParse[1].trim() //1(默认)：重复点击事件直接重置动画；2：重复点击事件需等待动画结束；
       var node = step.node
       var done = step.done
       var index = step.index
@@ -71,7 +72,7 @@ define([
      * @return {[type]}       [description]
      */
     Animation.extend('execute', function(step, event) {
-      var param = $.trim(step.param)
+      var param = step.param.trim()
       var node = step.node
       var done = step.done
       var owner = step.instance.options.owner //执行方法的宿主
@@ -87,7 +88,7 @@ define([
       node.isAnimating = true
 
       if (execute[2]) {
-        params = eval('([' + $.trim(/\((.+)\)/.exec(execute[2])[1]) + '])')
+        params = eval('([' + /\((.+)\)/.exec(execute[2])[1].trim() + '])')
       }
 
       //
@@ -101,7 +102,7 @@ define([
           var isStop = owner[func].apply(owner, params)
 
           //返回的是promise
-          if (_.isObject(isStop) && isStop.then && isStop.fail && isStop.done) {
+          if (_.isObject(isStop) && isStop.then) {
 
             isStop.then(function(param) {
               if (param !== false) { //函数返回false会中断动画流程
@@ -138,7 +139,7 @@ define([
       var done = step.done
 
       var whenNames = _.map(param.split(','), function(item) {
-        return $.trim(item)
+        return item.trim()
       })
 
       _.each(whenNames, function(name) {
@@ -177,8 +178,8 @@ define([
        *   2-添加完class动画结束后不移除该class(通常是添加transition型动画时),
        *   3-添加不含动画的普通class
        */
-      var className = $.trim(param.split(',')[0])
-      var mode = $.trim(param.split(',')[1]) || '1'
+      var className = param.split(',')[0].trim()
+      var mode = (param.split(',')[1] || '1').trim()
 
       node.addClass(className)
         //
@@ -258,14 +259,14 @@ define([
       //标识动画在进行中
       node.isAnimating = false
 
-      if (!/\s+/.test($.trim(pairs[pairs.length - 1]))) {
-        mode = $.trim(pairs.pop())
+      if (!/\s+/.test(pairs[pairs.length - 1].trim())) {
+        mode = pairs.pop().trim()
       }
 
       //支持多个内联样式，逗号分隔
       //exp: color red, display none;
       _.each(pairs, function(pair, i) {
-        pair = $.trim(pair)
+        pair = pair.trim()
         var tmp = pair.split(/\s+/)
         styles.push({
           name: tmp.shift(),
