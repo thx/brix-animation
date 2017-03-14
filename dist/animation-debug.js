@@ -82,18 +82,18 @@ define('extendCommand',[
    * @return {[type]} [description]
    */
   function extendCommand(Animation) {
-    // var self = this
-    //在事件触发时，需要清空已经添加上的样式名，回到初始化
-    var addedClass = [] //已经添加的样式名数组
-    var waitItv //setTimeout在on事件触发时被清除
 
     /**
      * 事件触发
      * dom事件绑定，同类型只能出现一次
      * 自定义事件需要emit触发
+     * mode =
+     *   1: (默认) 重复点击事件直接重置动画, 含清除setTimeout, 清除所添加的class，但style样式不清除
+     *   2: 重复点击事件需等待动画结束；
      */
     Animation.extend('on', function(step) {
-      var eventType = step.param
+      var eventType = $.trim(step.param.split(',')[0])
+      var eventMode = $.trim(step.param.split(',')[1]) //1(默认)：重复点击事件直接重置动画；2：重复点击事件需等待动画结束；
       var node = step.node
       var done = step.done
       var index = step.index
@@ -102,17 +102,23 @@ define('extendCommand',[
 
       //事件代理到body根节点
       $body.on(eventName, '[' + Constant.BX_ANIMATION_HOOK + ']', function(e) {
-
         if (node[0] === e.currentTarget) {
+
+          if (eventMode === '2' && node.isAnimating) {
+            //动画进行中，再次on事件不生效
+            return
+          }
+
           //on事件时清除setTimeout
-          clearTimeout(waitItv)
+          clearTimeout(node.waitItv)
 
           //清空附加上的class，初始化
-          console.log(addedClass)
-          _.each(addedClass, function(item) {
+          console.log(node.addedClass)
+          _.each(node.addedClass, function(item) {
             node.removeClass(item)
           })
-          addedClass = []
+          node.addedClass = []
+          node.isAnimating = false
 
           done(e, index)
         }
@@ -146,7 +152,7 @@ define('extendCommand',[
       node.isAnimating = true
 
       if (execute[2]) {
-        params = eval( '([' + $.trim(/\((.+)\)/.exec(execute[2])[1]) +'])' )
+        params = eval('([' + $.trim(/\((.+)\)/.exec(execute[2])[1]) + '])')
       }
 
       //
@@ -202,8 +208,8 @@ define('extendCommand',[
 
       _.each(whenNames, function(name) {
         //触发自定义的事件
-        _.each(step.instance._customEmits[name], function(emit) {
-          emit.done()
+        _.each(step.instance._customEmits[name], function(_step) {
+          _step.done()
         })
       })
 
@@ -225,6 +231,7 @@ define('extendCommand',[
       var done = step.done
       var eventNamespace = step.instance._eventNamespace
       var isAnimEndCallback = false
+        // var animIndex = node.animQueue.length - 1 //当前执行到节点的第几个动画下标
 
       /**
        * className格式：class:className,[mode]
@@ -235,11 +242,17 @@ define('extendCommand',[
        *   2-添加完class动画结束后不移除该class(通常是添加transition型动画时),
        *   3-添加不含动画的普通class
        */
-      var className = param.split(',')[0]
-      var mode = param.split(',')[1] || '1'
+      var className = $.trim(param.split(',')[0])
+      var mode = $.trim(param.split(',')[1]) || '1'
 
       node.addClass(className)
-      addedClass.push(className)
+        //
+      if (node.addedClass) {
+        node.addedClass.push(className)
+      } else {
+        node.addedClass = [className]
+      }
+
       node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
       node.off(compatEventName.transitionEnd + eventNamespace)
 
@@ -250,6 +263,7 @@ define('extendCommand',[
       if (mode === '3') { //普通无动画的class，直接执行done
         done(event)
         node.isAnimating = false
+          // node.animIndex = animIndex
       } else { //有动画的transition/animation动画完成执行回调
         function animateEnd(e) { //callback
           if (isAnimEndCallback) { //只执行一次动画结束的回调
@@ -258,10 +272,11 @@ define('extendCommand',[
           isAnimEndCallback = true
           if (mode !== '2') { //mode=1或默认时动画结束移除class
             node.removeClass(className)
-            addedClass.splice(addedClass.indexOf(className), 1)
+            node.addedClass.splice(node.addedClass.indexOf(className), 1)
           }
           done(event)
           node.isAnimating = false
+            // node.animIndex = animIndex
         }
 
         //动画结束
@@ -280,8 +295,7 @@ define('extendCommand',[
 
       //标识动画在进行中
       node.isAnimating = true
-
-      waitItv = setTimeout(function() {
+      node.waitItv = setTimeout(function() {
         done(event)
         node.isAnimating = false
       }, duration)
@@ -431,15 +445,24 @@ define('initAnimation',[
         return
       }
 
+
       //执行命令代码
       if (!isWhiteCommand) {
+        // if (step.node.animQueue) {
+        //   step.node.animQueue.push(step)
+        // } else {
+        //   step.node.animQueue = [step]
+        // }
+
         if (!step.node.isAnimating) {
+          // builtinCommand(step.node.animQueue[step.node.animIndex] || step, event)
           builtinCommand(step, event)
         } else {
           //如果前一个动画还未结束，则等待
           var itv = setInterval(function() {
             if (!step.node.isAnimating) {
               clearInterval(itv)
+              // builtinCommand(step.node.animQueue[step.node.animIndex] || step, event)
               builtinCommand(step, event)
             }
           }, 10)

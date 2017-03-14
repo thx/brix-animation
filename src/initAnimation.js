@@ -70,15 +70,24 @@ define([
         return
       }
 
+
       //执行命令代码
       if (!isWhiteCommand) {
+        // if (step.node.animQueue) {
+        //   step.node.animQueue.push(step)
+        // } else {
+        //   step.node.animQueue = [step]
+        // }
+
         if (!step.node.isAnimating) {
+          // builtinCommand(step.node.animQueue[step.node.animIndex] || step, event)
           builtinCommand(step, event)
         } else {
           //如果前一个动画还未结束，则等待
           var itv = setInterval(function() {
             if (!step.node.isAnimating) {
               clearInterval(itv)
+              // builtinCommand(step.node.animQueue[step.node.animIndex] || step, event)
               builtinCommand(step, event)
             }
           }, 10)

@@ -156,6 +156,7 @@
   line-height: 40px;
   text-align: center;
   left: 400px;
+  transition: all 0.3s;
 }
 
 </style>
@@ -166,7 +167,7 @@
     class:drop-ball-zoom;
     wait:200;
     execute:dropBall('400', true, '1,2', {a:1}, [1], 300);
-    call:text-changed,text-changed2;
+    call:text-changed;
     class:drop-ball-disappear,2;
     call: text-changed3;
     call: text-changed4;
@@ -177,11 +178,13 @@
     execute: test();
     class:tada;
     when:text-changed3;
-    class:shake;
-    wait:2000;
-    when:text-changed4;
-    class:wobble;
+    class: jello;
+    class: shake;
+    class: shake;
+    class: wobble;
   ">联动的动画元素</div>
+
+  <div class="linkage-anim animated" style="left: 700px;" bx-animation="on:mouseenter; class:tada; style: width 300px, background-color red, 2; on:mouseleave,2; class:wobble;">第二个when</div>
 
   <div class="drop-ground"></div>
 </div>
