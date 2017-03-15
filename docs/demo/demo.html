@@ -188,11 +188,16 @@
   ">联动的动画元素</div>
 
   <div class="linkage-anim animated" style="left: 700px;" bx-animation="
-    on: mouseenter,2;
+     when: text-changed;
+    class: tada;
+    on: click;
+    execute: haha(1);
     class: tada;
     class: width,2;
     removeClass: width;
     class: tada;
+
+
   ">第二个when</div>
 
   <div class="drop-ground"></div>
@@ -233,6 +238,9 @@
 
       test: function(evt) {
         evt.node.html('联动元素被触发了')
+      },
+      haha: function(evt) {
+        debugger
       }
     }
 

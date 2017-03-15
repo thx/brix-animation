@@ -6,3 +6,4 @@ define(function() {
     BX_ANIMATION_HOOK: 'bx-animation' //配置钩子
   }
 })
+

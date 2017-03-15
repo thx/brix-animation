@@ -113,6 +113,13 @@ define([
           step.instance._customEmits[step.param] = [step]
         }
       }
+
+      //如果是on命令，直接执行
+      if (step.command === 'on') {
+        var builtinCommand = Animation._builtinCommands[step.command]
+        builtinCommand(step)
+      }
+
     })
 
     //逐个执行命令
