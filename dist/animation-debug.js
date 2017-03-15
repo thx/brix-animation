@@ -360,7 +360,7 @@ define('brix/extendCommand',[
       node.addedStyles = node.addedStyles || []
 
       //标识动画在进行中
-      node.isAnimating = false
+      node.isAnimating = true
 
       if (!/\s+/.test(pairs[pairs.length - 1].trim())) {
         mode = pairs.pop().trim()
