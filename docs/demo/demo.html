@@ -158,6 +158,9 @@
   left: 400px;
   transition: all 0.3s;
 }
+.width {
+  width: 300px;
+}
 
 </style>
 <div >
@@ -185,9 +188,11 @@
   ">联动的动画元素</div>
 
   <div class="linkage-anim animated" style="left: 700px;" bx-animation="
-    on:mouseenter,2;
-    class:tada;
-    style: width 300px,2;
+    on: mouseenter,2;
+    class: tada;
+    class: width,2;
+    removeClass: width;
+    class: tada;
   ">第二个when</div>
 
   <div class="drop-ground"></div>

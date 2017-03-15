@@ -2141,7 +2141,7 @@ var requirejs, require, define;
   }
 
   var brix = {
-    'brix/animation': '../dist/animation-debug',
+    'brix/animation': 'http://g.alicdn.com/thx/brix-animation/20170315.151921.087/animation-debug',
     jquery: '../bower_components/jquery/dist/jquery',
     promise: '../bower_components/promise/promise',
     underscore: '../bower_components/underscore/underscore'
