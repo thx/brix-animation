@@ -545,7 +545,7 @@ define('brix/initAnimation',[
       }
 
       //如果是on命令，直接执行
-      if (step.command === 'on') {
+      if (step.command === 'on' && i !== 0) {
         var builtinCommand = Animation._builtinCommands[step.command]
         builtinCommand(step)
       }
