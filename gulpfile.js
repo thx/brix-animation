@@ -5,7 +5,6 @@ var through = require('through2')
 var jshint = require('gulp-jshint')
 var webpack = require("webpack")
 var rjs = require('gulp-requirejs')
-var requirejsOptimize = require('gulp-requirejs-optimize');
 var uglify = require('gulp-uglify')
     // var mochaPhantomJS = require('gulp-mocha-phantomjs')
 var exec = require('child_process').exec
@@ -55,16 +54,17 @@ gulp.task('jshint', function() {
 // https://github.com/RobinThrift/gulp-requirejs
 // http://requirejs.org/docs/optimization.html#empty
 gulp.task('ex-rjs', function() {
-    return gulp.src('src/animation.js')
-        .pipe(requirejsOptimize({
+    return rjs({
+            baseUrl: 'src',
             paths: {
                 "jquery": "empty:",
                 "underscore": "empty:"
             },
-            out: 'animation-debug.js',
+            name: 'brix/animation',
+            out: 'dist/animation-debug.js',
             optimize: 'none'
-        }))
-        .pipe(gulp.dest('dist'))
+        })
+        .pipe(gulp.dest('.'))
 })
 
 // https://github.com/floatdrop/gulp-watch

@@ -1,13 +1,8 @@
 /**
  * 兼容性动画事件名
- * @param  {[type]} $  [description]
- * @param  {[type]} _) {}          [description]
  * @return {[type]}    [description]
  */
-define('compatEventName',[
-  'jquery',
-  'underscore'
-], function($, _) {
+define('brix/compatEventName',[],function() {
 
   // 兼容动画事件
   var transitionEnd = 'transitionend';
@@ -57,7 +52,7 @@ define('compatEventName',[
 /**
  * 常量
  */
-define('constant',[], function() {
+define('brix/constant',[],function() {
   return {
     BX_ANIMATION_HOOK: 'bx-animation' //配置钩子
   }
@@ -70,12 +65,11 @@ define('constant',[], function() {
  * @param  {[type]} render: function()    {                                var   self        [description]
  * @return {[type]}         [description]
  */
-define('extendCommand',[
+define('brix/extendCommand',[
   'jquery',
-  'underscore',
   './compatEventName',
   './constant'
-], function($, _, compatEventName, Constant) {
+], function($, compatEventName, Constant) {
 
   /**
    * 注册内建的命令
@@ -114,18 +108,31 @@ define('extendCommand',[
           clearTimeout(node.waitItv)
 
           //清空附加上的class，初始化
-          console.log(node.addedClass)
-          _.each(node.addedClass, function(item) {
-            node.removeClass(item)
-          })
+          console.log('addedClass', node.addedClass)
+          if (node.addedClass) {
+            node.addedClass.forEach(function(className, i) {
+              node.removeClass(className)
+            })
+          }
           node.addedClass = []
+
+          //清空附加上的styles样式，初始化
+          console.log('addedStyles', node.addedStyles)
+          if (node.addedStyles) {
+            node.addedStyles.forEach(function(style, i) {
+              node.css(style.name, '')
+            })
+          }
+          node.addedStyles = []
+
+          //动画状态复位
           node.isAnimating = false
 
           done(e, index)
         }
       })
 
-      if (_.indexOf(step.instance._delegateEvents, eventName) === -1) {
+      if (step.instance._delegateEvents.indexOf(eventName) === -1) {
         step.instance._delegateEvents.push(eventName)
       }
     })
@@ -167,7 +174,7 @@ define('extendCommand',[
           var isStop = owner[func].apply(owner, params)
 
           //返回的是promise
-          if (_.isObject(isStop) && isStop.then) {
+          if ((typeof isStop === 'object') && isStop.then) {
 
             isStop.then(function(param) {
               if (param !== false) { //函数返回false会中断动画流程
@@ -202,14 +209,14 @@ define('extendCommand',[
       var param = step.param
       var node = step.node
       var done = step.done
+      var whenNames = param.split(',')
 
-      var whenNames = _.map(param.split(','), function(item) {
-        return item.trim()
-      })
+      whenNames.forEach(function(name) {
+        name = name.trim()
 
-      _.each(whenNames, function(name) {
         //触发自定义的事件
-        _.each(step.instance._customEmits[name], function(_step) {
+        var _customEmits = step.instance._customEmits[name] || []
+        _customEmits.forEach(function(_step) {
           _step.done()
         })
       })
@@ -316,10 +323,12 @@ define('extendCommand',[
       var node = step.node
       var done = step.done
       var pairs = step.param.split(',')
-      var styles = []
       var eventNamespace = step.instance._eventNamespace
       var mode = '1'
       var isAnimEndCallback = false
+
+      //添加的样式
+      node.addedStyles = node.addedStyles || []
 
       //标识动画在进行中
       node.isAnimating = false
@@ -330,16 +339,16 @@ define('extendCommand',[
 
       //支持多个内联样式，逗号分隔
       //exp: color red, display none;
-      _.each(pairs, function(pair, i) {
+      pairs.forEach(function(pair, i) {
         pair = pair.trim()
         var tmp = pair.split(/\s+/)
-        styles.push({
+        node.addedStyles.push({
           name: tmp.shift(),
           value: tmp.join(' ')
         })
       })
 
-      _.each(styles, function(style, i) {
+      node.addedStyles.forEach(function(style, i) {
         node.css(style.name, style.value)
       })
 
@@ -357,7 +366,7 @@ define('extendCommand',[
           }
           isAnimEndCallback = true
           if (mode !== '2') { ///mode=1或默认时动画结束移除style
-            _.each(styles, function(style, i) {
+            node.addedStyles.forEach(function(style, i) {
               node.css(style.name, '')
             })
           }
@@ -380,7 +389,7 @@ define('extendCommand',[
  * @param  {[type]} Loader)      {               function initAnimation(node) {    var self [description]
  * @return {[type]}              [description]
  */
-define('initAnimation',[
+define('brix/initAnimation',[
   './constant'
 ], function(Constant) {
 
@@ -438,8 +447,8 @@ define('initAnimation',[
       //冒号分隔命令名与命令的参数
       var step = getStep(commands[i], i)
       var builtinCommand = Animation._builtinCommands[step.command]
-      var whiteCommand = ['when'] //when命令不需要注册，也能自执行
-      var isWhiteCommand = $.inArray(step.command, whiteCommand) > -1
+      var whiteCommands = ['when'] //when命令不需要注册，也能自执行
+      var isWhiteCommand = whiteCommands.indexOf(step.command) > -1
 
       if (!builtinCommand && !isWhiteCommand) { // 未定义的命令抛错
         throw step.command + ' 该命令未定义'
@@ -463,7 +472,7 @@ define('initAnimation',[
           var itv = setInterval(function() {
             if (!step.node.isAnimating) {
               clearInterval(itv)
-              // builtinCommand(step.node.animQueue[step.node.animIndex] || step, event)
+                // builtinCommand(step.node.animQueue[step.node.animIndex] || step, event)
               builtinCommand(step, event)
             }
           }, 10)
@@ -474,7 +483,7 @@ define('initAnimation',[
     /**
      * 将所有when自定义事件储存起来，等待触发
      */
-    _.each(commands, function(item, i) {
+    commands.forEach(function(item, i) {
       var step = getStep(item, i)
 
       //when命令缓存起来等待emit触发
@@ -504,13 +513,12 @@ define('initAnimation',[
  * @return {[type]}                  [description]
  */
 
-define('animation',[
+define('brix/animation',[
   'jquery',
-  'underscore',
   './extendCommand',
   './initAnimation',
   './constant'
-], function($, _, extendCommand, initAnimation, Constant) {
+], function(jquery, extendCommand, initAnimation, Constant) {
 
   /**
    * [Animation description]
@@ -544,13 +552,11 @@ define('animation',[
     var allAnimNode = $(self.options.el).find('[' + Constant.BX_ANIMATION_HOOK + ']')
 
     //各节点进行动画绑定
-    _.each(allAnimNode, function(node, i) {
+    allAnimNode.each(function(i, node) {
       //解析bx-animation配置
       initAnimation.call(self, Animation, $(node))
     })
-
   }
-
 
   /**
    * 注册自定义的命令
@@ -576,7 +582,7 @@ define('animation',[
 
     //销毁
     destroy: function() {
-      _.each(this._delegateEvents, function(eventType) {
+      this._delegateEvents.forEach(function(eventType, i) {
         $(document.body).off(eventType)
       })
     }

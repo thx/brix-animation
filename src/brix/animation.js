@@ -7,11 +7,10 @@
 
 define([
   'jquery',
-  'underscore',
   './extendCommand',
   './initAnimation',
   './constant'
-], function($, _, extendCommand, initAnimation, Constant) {
+], function(jquery, extendCommand, initAnimation, Constant) {
 
   /**
    * [Animation description]
@@ -45,13 +44,11 @@ define([
     var allAnimNode = $(self.options.el).find('[' + Constant.BX_ANIMATION_HOOK + ']')
 
     //各节点进行动画绑定
-    _.each(allAnimNode, function(node, i) {
+    allAnimNode.each(function(i, node) {
       //解析bx-animation配置
       initAnimation.call(self, Animation, $(node))
     })
-
   }
-
 
   /**
    * 注册自定义的命令
@@ -77,7 +74,7 @@ define([
 
     //销毁
     destroy: function() {
-      _.each(this._delegateEvents, function(eventType) {
+      this._delegateEvents.forEach(function(eventType, i) {
         $(document.body).off(eventType)
       })
     }

@@ -7,10 +7,9 @@
  */
 define([
   'jquery',
-  'underscore',
   './compatEventName',
   './constant'
-], function($, _, compatEventName, Constant) {
+], function($, compatEventName, Constant) {
 
   /**
    * 注册内建的命令
@@ -49,18 +48,31 @@ define([
           clearTimeout(node.waitItv)
 
           //清空附加上的class，初始化
-          console.log(node.addedClass)
-          _.each(node.addedClass, function(item) {
-            node.removeClass(item)
-          })
+          console.log('addedClass', node.addedClass)
+          if (node.addedClass) {
+            node.addedClass.forEach(function(className, i) {
+              node.removeClass(className)
+            })
+          }
           node.addedClass = []
+
+          //清空附加上的styles样式，初始化
+          console.log('addedStyles', node.addedStyles)
+          if (node.addedStyles) {
+            node.addedStyles.forEach(function(style, i) {
+              node.css(style.name, '')
+            })
+          }
+          node.addedStyles = []
+
+          //动画状态复位
           node.isAnimating = false
 
           done(e, index)
         }
       })
 
-      if (_.indexOf(step.instance._delegateEvents, eventName) === -1) {
+      if (step.instance._delegateEvents.indexOf(eventName) === -1) {
         step.instance._delegateEvents.push(eventName)
       }
     })
@@ -102,7 +114,7 @@ define([
           var isStop = owner[func].apply(owner, params)
 
           //返回的是promise
-          if (_.isObject(isStop) && isStop.then) {
+          if ((typeof isStop === 'object') && isStop.then) {
 
             isStop.then(function(param) {
               if (param !== false) { //函数返回false会中断动画流程
@@ -137,14 +149,14 @@ define([
       var param = step.param
       var node = step.node
       var done = step.done
+      var whenNames = param.split(',')
 
-      var whenNames = _.map(param.split(','), function(item) {
-        return item.trim()
-      })
+      whenNames.forEach(function(name) {
+        name = name.trim()
 
-      _.each(whenNames, function(name) {
         //触发自定义的事件
-        _.each(step.instance._customEmits[name], function(_step) {
+        var _customEmits = step.instance._customEmits[name] || []
+        _customEmits.forEach(function(_step) {
           _step.done()
         })
       })
@@ -251,10 +263,12 @@ define([
       var node = step.node
       var done = step.done
       var pairs = step.param.split(',')
-      var styles = []
       var eventNamespace = step.instance._eventNamespace
       var mode = '1'
       var isAnimEndCallback = false
+
+      //添加的样式
+      node.addedStyles = node.addedStyles || []
 
       //标识动画在进行中
       node.isAnimating = false
@@ -265,16 +279,16 @@ define([
 
       //支持多个内联样式，逗号分隔
       //exp: color red, display none;
-      _.each(pairs, function(pair, i) {
+      pairs.forEach(function(pair, i) {
         pair = pair.trim()
         var tmp = pair.split(/\s+/)
-        styles.push({
+        node.addedStyles.push({
           name: tmp.shift(),
           value: tmp.join(' ')
         })
       })
 
-      _.each(styles, function(style, i) {
+      node.addedStyles.forEach(function(style, i) {
         node.css(style.name, style.value)
       })
 
@@ -292,7 +306,7 @@ define([
           }
           isAnimEndCallback = true
           if (mode !== '2') { ///mode=1或默认时动画结束移除style
-            _.each(styles, function(style, i) {
+            node.addedStyles.forEach(function(style, i) {
               node.css(style.name, '')
             })
           }

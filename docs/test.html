@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <!-- Include RequireJS -->
+    <script src="./require+config.js"></script>
+  </head>
+  <body>
+
+  <div bx-animation="on:click; execute:testclick({a:1}, [ 1, 2], 'basdf', false);">
+    click
+  </div>
+
+
+    <script>
+      require([
+        'brix/animation',
+        'jquery',
+        'underscore'
+      ], function(Anim, $, _) {
+         //自定义扩展命令: 移除样式
+        Anim.extend('removeClass', function(step) {
+          var node = step.node
+          var className = step.param
+          var done = step.done
+
+          node.removeClass(className)
+          done() //结束执行done
+        })
+
+        var options = {
+          el: $('body'),
+          owner: {
+            testclick: function(e, arg1, arg2) {
+              $(e.node).html('执行了testclick方法,方法的参数为' + JSON.stringify(arg2))
+            }
+          }
+        } //配置
+        var anim = new Anim(options)
+
+      })
+
+    </script>
+  </body>
+</html>

@@ -1,13 +1,8 @@
 /**
  * 兼容性动画事件名
- * @param  {[type]} $  [description]
- * @param  {[type]} _) {}          [description]
  * @return {[type]}    [description]
  */
-define([
-  'jquery',
-  'underscore'
-], function($, _) {
+define(function() {
 
   // 兼容动画事件
   var transitionEnd = 'transitionend';

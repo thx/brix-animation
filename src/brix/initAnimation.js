@@ -62,8 +62,8 @@ define([
       //冒号分隔命令名与命令的参数
       var step = getStep(commands[i], i)
       var builtinCommand = Animation._builtinCommands[step.command]
-      var whiteCommand = ['when'] //when命令不需要注册，也能自执行
-      var isWhiteCommand = $.inArray(step.command, whiteCommand) > -1
+      var whiteCommands = ['when'] //when命令不需要注册，也能自执行
+      var isWhiteCommand = whiteCommands.indexOf(step.command) > -1
 
       if (!builtinCommand && !isWhiteCommand) { // 未定义的命令抛错
         throw step.command + ' 该命令未定义'
@@ -87,7 +87,7 @@ define([
           var itv = setInterval(function() {
             if (!step.node.isAnimating) {
               clearInterval(itv)
-              // builtinCommand(step.node.animQueue[step.node.animIndex] || step, event)
+                // builtinCommand(step.node.animQueue[step.node.animIndex] || step, event)
               builtinCommand(step, event)
             }
           }, 10)
@@ -98,7 +98,7 @@ define([
     /**
      * 将所有when自定义事件储存起来，等待触发
      */
-    _.each(commands, function(item, i) {
+    commands.forEach(function(item, i) {
       var step = getStep(item, i)
 
       //when命令缓存起来等待emit触发

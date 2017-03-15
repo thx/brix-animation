@@ -7,7 +7,7 @@
     <script type="text/javascript">
         require.config({
             paths: {
-                'animation': '../../dist/animation-debug',
+                'brix/animation': '../../dist/animation-debug',
                 jquery: '../../bower_components/jquery/dist/jquery',
                 promise: '../../bower_components/promise/promise',
                 underscore: '../../bower_components/underscore/underscore'
@@ -184,7 +184,11 @@
     class: wobble;
   ">联动的动画元素</div>
 
-  <div class="linkage-anim animated" style="left: 700px;" bx-animation="on:mouseenter; class:tada;  on:mouseleave; class:wobble;">第二个when</div>
+  <div class="linkage-anim animated" style="left: 700px;" bx-animation="
+    on:mouseenter,2;
+    class:tada;
+    style: width 300px,2;
+  ">第二个when</div>
 
   <div class="drop-ground"></div>
 </div>
@@ -193,40 +197,40 @@
 
   </div>
   <script type="text/javascript">
-  var owner = {
-    dropBall: function(evt, displacement) {
-      var el = evt.node
-      var d = $.Deferred()
-
-      el.animate({
-        left: displacement,
-        top: displacement
-      }, {
-        duration: 1300,
-        queue: false,
-        specialEasing: {
-          left: 'swing',
-          top: 'easeOutBounce'
-        },
-        complete: function() {
-          d.resolve()
-        }
-      })
-
-      return d.promise()
-    },
-
-    test: function(evt) {
-      evt.node.html('联动元素被触发了')
-    }
-  }
-
   require([
-    'animation',
+    'brix/animation',
     'jquery',
     'underscore'
   ], function(Anim, $, _) {
-     //自定义扩展命令: 移除样式
+
+    var owner = {
+      dropBall: function(evt, displacement) {
+        var el = evt.node
+        var d = $.Deferred()
+
+        el.animate({
+          left: displacement,
+          top: displacement
+        }, {
+          duration: 1300,
+          queue: false,
+          specialEasing: {
+            left: 'swing',
+            top: 'easeOutBounce'
+          },
+          complete: function() {
+            d.resolve()
+          }
+        })
+
+        return d.promise()
+      },
+
+      test: function(evt) {
+        evt.node.html('联动元素被触发了')
+      }
+    }
+
     var options = {
       el: $('body'),
       owner: owner
