@@ -42,6 +42,7 @@
         <dd><a href="#on">on</a></dd>
         <dd><a href="#execute">execute</a></dd>
         <dd><a href="#class">class</a></dd>
+        <dd><a href="#removeClass">removeClass</a></dd>
         <dd><a href="#style">style</a></dd>
         <dd><a href="#wait">wait</a></dd>
         <dd><a href="#call">call</a></dd>
@@ -231,6 +232,27 @@ testClick: function(evt, displacement) {
 <pre>
 <code class="language-javascript">
 &lt;div bx-animation="on:click; class:swing,1"&gt;&lt;/div&gt;
+</code></pre>
+<div>
+</div>
+          </li>
+        </ul>
+      </div>
+
+       <div class="api">
+        <h4 class="api-name" id="removeClass">removeClass</h4>
+        <ul class="api-li">
+          <li>类型：<span class="key-code">指令</span></li>
+          <li>支持的值：<span class="key-code">className,[mode]</span> </li>
+          <li>说明：指定删除<span class="key-code">class</span>完成动效，支持传参<span class="key-code">mode</span>=
+              <div>1 - 默认值，删除完class在动画结束时执行下一指令(通常是删除animation/transition型动画时)</div>
+              <div>3 - 删除不含动画的普通class，会直接执行下一指令</div>
+
+          </li>
+          <li>用法：
+<pre>
+<code class="language-javascript">
+&lt;div bx-animation="on:click; class:swing,2; removeClass:swing;"&gt;&lt;/div&gt;
 </code></pre>
 <div>
 </div>
