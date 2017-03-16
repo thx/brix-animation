@@ -15,7 +15,7 @@ define([
    * @param  {dom} node 当前节点
    */
   function initAnimation(Animation, node) {
-    var self = this
+    var self = this //当前animation实例
     var commands = node.attr(Constant.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
 
     //去掉;结尾导致数组多余的一个空值
