@@ -21,9 +21,6 @@ define([
      * 事件触发
      * dom事件绑定，同类型只能出现一次
      * 自定义事件需要emit触发
-     * mode =
-     *   1: (默认) 重复点击事件直接重置动画, 含清除setTimeout, 清除所添加的class，但style样式不清除
-     *   2: 重复点击事件需等待动画结束；
      */
     Animation.extend('on', function(step) {
       var eventParse = step.param.split(',')
