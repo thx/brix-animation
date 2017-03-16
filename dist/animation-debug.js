@@ -89,7 +89,7 @@ define('brix/extendCommand',[
     Animation.extend('on', function(step) {
       var eventParse = step.param.split(',')
       var eventType = eventParse[0].trim()
-      var eventMode = eventParse[1] && eventParse[1].trim() //1(默认)：重复点击事件直接重置动画；2：重复点击事件需等待动画结束；
+      // var eventMode = eventParse[1] && eventParse[1].trim() //1(默认)：重复点击事件直接重置动画；2：重复点击事件需等待动画结束；
       var node = step.node
       var done = step.done
       var index = step.index
@@ -100,34 +100,35 @@ define('brix/extendCommand',[
       $body.on(eventName, '[' + Constant.BX_ANIMATION_HOOK + ']', function(e) {
         if (node[0] === e.currentTarget) {
 
-          if (eventMode === '2' && node.isAnimating) {
+          // if (eventMode === '2' && node.isAnimating) {
+          if (node.isAnimating) {
             //动画进行中，再次on事件不生效
             return
           }
 
           //on事件时清除setTimeout
-          clearTimeout(node.waitItv)
+          // clearTimeout(node.waitItv)
 
           //清空附加上的class，初始化
-          console.log('addedClass', node.addedClass)
-          if (node.addedClass) {
-            node.addedClass.forEach(function(className, i) {
-              node.removeClass(className)
-            })
-          }
-          node.addedClass = []
+          // console.log('addedClass', node.addedClass)
+          // if (node.addedClass) {
+          //   node.addedClass.forEach(function(className, i) {
+          //     node.removeClass(className)
+          //   })
+          // }
+          // node.addedClass = []
 
           //清空附加上的styles样式，初始化
-          console.log('addedStyles', node.addedStyles)
-          if (node.addedStyles) {
-            node.addedStyles.forEach(function(style, i) {
-              node.css(style.name, '')
-            })
-          }
-          node.addedStyles = []
+          // console.log('addedStyles', node.addedStyles)
+          // if (node.addedStyles) {
+          //   node.addedStyles.forEach(function(style, i) {
+          //     node.css(style.name, '')
+          //   })
+          // }
+          // node.addedStyles = []
 
           //动画状态复位
-          node.isAnimating = false
+          // node.isAnimating = false
 
           //next
           done(e, index)
@@ -257,11 +258,11 @@ define('brix/extendCommand',[
 
       node.addClass(className)
         //
-      if (node.addedClass) {
-        node.addedClass.push(className)
-      } else {
-        node.addedClass = [className]
-      }
+      // if (node.addedClass) {
+      //   node.addedClass.push(className)
+      // } else {
+      //   node.addedClass = [className]
+      // }
 
       node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
       node.off(compatEventName.transitionEnd + eventNamespace)
@@ -282,7 +283,7 @@ define('brix/extendCommand',[
 
           if (mode !== '2') { //mode=1或默认时动画结束移除class
             node.removeClass(className)
-            node.addedClass.splice(node.addedClass.indexOf(className), 1)
+            // node.addedClass.splice(node.addedClass.indexOf(className), 1)
           }
           node.isAnimating = false
           done(event)
@@ -358,7 +359,7 @@ define('brix/extendCommand',[
       var mode = '1'
 
       //添加的样式
-      node.addedStyles = node.addedStyles || []
+      var addedStyles = []
 
       //标识动画在进行中
       node.isAnimating = true
@@ -372,13 +373,13 @@ define('brix/extendCommand',[
       pairs.forEach(function(pair, i) {
         pair = pair.trim()
         var tmp = pair.split(/\s+/)
-        node.addedStyles.push({
+        addedStyles.push({
           name: tmp.shift(),
           value: tmp.join(' ')
         })
       })
 
-      node.addedStyles.forEach(function(style, i) {
+      addedStyles.forEach(function(style, i) {
         node.css(style.name, style.value)
       })
 
@@ -396,7 +397,7 @@ define('brix/extendCommand',[
           }
 
           if (mode !== '2') { ///mode=1或默认时动画结束移除style
-            node.addedStyles.forEach(function(style, i) {
+            addedStyles.forEach(function(style, i) {
               node.css(style.name, '')
             })
           }
@@ -493,7 +494,7 @@ define('brix/initAnimation',[
       //冒号分隔命令名与命令的参数
       var step = getStep(commands[i], i)
       var builtinCommand = Animation._builtinCommands[step.command]
-      var whiteCommands = ['when'] //when命令不需要注册，也能自执行
+      var whiteCommands = ['when', 'on'] //when命令不需要注册，也能自执行
       var isWhiteCommand = whiteCommands.indexOf(step.command) > -1
 
       if (!builtinCommand && !isWhiteCommand) { // 未定义的命令抛错
@@ -546,7 +547,7 @@ define('brix/initAnimation',[
       }
 
       //如果是on命令，直接执行
-      if (step.command === 'on' && i !== 0) {
+      if (step.command === 'on') {
         var builtinCommand = Animation._builtinCommands[step.command]
         builtinCommand(step)
       }

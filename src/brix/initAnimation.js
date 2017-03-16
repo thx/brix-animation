@@ -62,7 +62,7 @@ define([
       //冒号分隔命令名与命令的参数
       var step = getStep(commands[i], i)
       var builtinCommand = Animation._builtinCommands[step.command]
-      var whiteCommands = ['when'] //when命令不需要注册，也能自执行
+      var whiteCommands = ['when', 'on'] //when命令不需要注册，也能自执行
       var isWhiteCommand = whiteCommands.indexOf(step.command) > -1
 
       if (!builtinCommand && !isWhiteCommand) { // 未定义的命令抛错
@@ -115,7 +115,7 @@ define([
       }
 
       //如果是on命令，直接执行
-      if (step.command === 'on' && i !== 0) {
+      if (step.command === 'on') {
         var builtinCommand = Animation._builtinCommands[step.command]
         builtinCommand(step)
       }
