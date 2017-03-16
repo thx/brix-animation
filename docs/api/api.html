@@ -145,8 +145,11 @@ var anim = new Animation(options)
         <ul class="api-li">
           <li>类型：<span class="key-code">指令</span></li>
           <li>支持的值：<span class="key-code">click|mouseenter|mouseleave|..</span> </li>
-          <li>说明：支持所有dom事件，通常做为系列动效的触发事件
+          <li>说明：支持所有dom事件，通常做为系列动效的触发事件，支持传参<span class="key-code">mode</span>=
+              <div>1 - 默认值，重复点击事件直接重置动画, 含清除setTimeout, 清除所添加的class，但style样式不清除</div>
+              <div>2 - 重复点击事件需等待动画结束；</div>
           </li>
+
           <li>用法：
 <pre>
 <code class="language-javascript">
