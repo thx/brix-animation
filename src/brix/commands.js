@@ -7,9 +7,8 @@
  */
 define([
   'jquery',
-  './compatEventName',
-  './constant'
-], function($, compatEventName, Constant) {
+  './util'
+], function($, util) {
 
   /**
    * 注册内建的命令
@@ -33,7 +32,7 @@ define([
       var eventName = eventType + step.instance._eventNamespace
 
       //事件代理到body根节点
-      $body.on(eventName, '[' + Constant.BX_ANIMATION_HOOK + ']', function(e) {
+      $body.on(eventName, '[' + util.BX_ANIMATION_HOOK + ']', function(e) {
         if (node[0] === e.currentTarget) {
 
           // if (eventMode === '2' && node.isAnimating) {
@@ -200,8 +199,8 @@ define([
       //   node.addedClass = [className]
       // }
 
-      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + eventNamespace)
+      node.off(util.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(util.transitionEnd + eventNamespace)
 
       //同个节点上多个when被触发时，有可能后面一个when触发时，前一个when动画还未结束，导致问题出现
       //解决方案：后一个when触发时，如果前一个when未结束，则进入等待区，等前一个when动画结束，再执行
@@ -227,8 +226,8 @@ define([
         }
 
         //动画结束
-        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
-        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
+        node.on(util.animationEnd + eventNamespace, animateEnd)
+        node.on(util.transitionEnd + eventNamespace, animateEnd)
       }
     })
 
@@ -250,8 +249,8 @@ define([
 
       node.removeClass(className)
 
-      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + eventNamespace)
+      node.off(util.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(util.transitionEnd + eventNamespace)
 
       //同个节点上多个when被触发时，有可能后面一个when触发时，前一个when动画还未结束，导致问题出现
       //解决方案：后一个when触发时，如果前一个when未结束，则进入等待区，等前一个when动画结束，再执行
@@ -270,8 +269,8 @@ define([
         }
 
         //动画结束
-        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
-        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
+        node.on(util.animationEnd + eventNamespace, animateEnd)
+        node.on(util.transitionEnd + eventNamespace, animateEnd)
       }
 
     })
@@ -319,8 +318,8 @@ define([
         node.css(style.name, style.value)
       })
 
-      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + eventNamespace)
+      node.off(util.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(util.transitionEnd + eventNamespace)
 
       if (mode === '3') { //没有动画效果的样式
         node.isAnimating = false
@@ -341,8 +340,8 @@ define([
           done(event)
         }
 
-        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
-        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
+        node.on(util.transitionEnd + eventNamespace, animateEnd)
+        node.on(util.animationEnd + eventNamespace, animateEnd)
       }
     })
 

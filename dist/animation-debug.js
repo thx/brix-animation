@@ -2,7 +2,7 @@
  * 兼容性动画事件名
  * @return {[type]}    [description]
  */
-define('brix/compatEventName',[],function() {
+define('brix/util',[],function() {
 
   // 兼容动画事件
   var transitionEnd = 'transitionend';
@@ -46,19 +46,10 @@ define('brix/compatEventName',[],function() {
     transitionEnd: transitionEnd,
     animationEnd: animationEnd,
     transitionProperty: transitionProperty,
-    animationProperty: animationProperty
-  }
-});
-/**
- * 常量
- */
-define('brix/constant',[],function() {
-  return {
+    animationProperty: animationProperty,
     BX_ANIMATION_HOOK: 'bx-animation' //配置钩子
   }
-})
-
-;
+});
 /**
  * 所有内建的命令
  * @param  {[type]} $       [description]
@@ -66,11 +57,10 @@ define('brix/constant',[],function() {
  * @param  {[type]} render: function()    {                                var   self        [description]
  * @return {[type]}         [description]
  */
-define('brix/extendCommand',[
+define('brix/commands',[
   'jquery',
-  './compatEventName',
-  './constant'
-], function($, compatEventName, Constant) {
+  './util'
+], function($, util) {
 
   /**
    * 注册内建的命令
@@ -94,7 +84,7 @@ define('brix/extendCommand',[
       var eventName = eventType + step.instance._eventNamespace
 
       //事件代理到body根节点
-      $body.on(eventName, '[' + Constant.BX_ANIMATION_HOOK + ']', function(e) {
+      $body.on(eventName, '[' + util.BX_ANIMATION_HOOK + ']', function(e) {
         if (node[0] === e.currentTarget) {
 
           // if (eventMode === '2' && node.isAnimating) {
@@ -261,8 +251,8 @@ define('brix/extendCommand',[
       //   node.addedClass = [className]
       // }
 
-      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + eventNamespace)
+      node.off(util.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(util.transitionEnd + eventNamespace)
 
       //同个节点上多个when被触发时，有可能后面一个when触发时，前一个when动画还未结束，导致问题出现
       //解决方案：后一个when触发时，如果前一个when未结束，则进入等待区，等前一个when动画结束，再执行
@@ -288,8 +278,8 @@ define('brix/extendCommand',[
         }
 
         //动画结束
-        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
-        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
+        node.on(util.animationEnd + eventNamespace, animateEnd)
+        node.on(util.transitionEnd + eventNamespace, animateEnd)
       }
     })
 
@@ -311,8 +301,8 @@ define('brix/extendCommand',[
 
       node.removeClass(className)
 
-      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + eventNamespace)
+      node.off(util.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(util.transitionEnd + eventNamespace)
 
       //同个节点上多个when被触发时，有可能后面一个when触发时，前一个when动画还未结束，导致问题出现
       //解决方案：后一个when触发时，如果前一个when未结束，则进入等待区，等前一个when动画结束，再执行
@@ -331,8 +321,8 @@ define('brix/extendCommand',[
         }
 
         //动画结束
-        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
-        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
+        node.on(util.animationEnd + eventNamespace, animateEnd)
+        node.on(util.transitionEnd + eventNamespace, animateEnd)
       }
 
     })
@@ -380,8 +370,8 @@ define('brix/extendCommand',[
         node.css(style.name, style.value)
       })
 
-      node.off(compatEventName.animationEnd + eventNamespace) //防止重复添加事件
-      node.off(compatEventName.transitionEnd + eventNamespace)
+      node.off(util.animationEnd + eventNamespace) //防止重复添加事件
+      node.off(util.transitionEnd + eventNamespace)
 
       if (mode === '3') { //没有动画效果的样式
         node.isAnimating = false
@@ -402,8 +392,8 @@ define('brix/extendCommand',[
           done(event)
         }
 
-        node.on(compatEventName.transitionEnd + eventNamespace, animateEnd)
-        node.on(compatEventName.animationEnd + eventNamespace, animateEnd)
+        node.on(util.transitionEnd + eventNamespace, animateEnd)
+        node.on(util.animationEnd + eventNamespace, animateEnd)
       }
     })
 
@@ -433,9 +423,9 @@ define('brix/extendCommand',[
  * @param  {[type]} Loader)      {               function initAnimation(node) {    var self [description]
  * @return {[type]}              [description]
  */
-define('brix/initAnimation',[
-  './constant'
-], function(Constant) {
+define('brix/parse',[
+  './util'
+], function(util) {
 
   /**
    * 解析bx-animation配置，挨个执行命令
@@ -445,7 +435,7 @@ define('brix/initAnimation',[
    */
   function initAnimation(Animation, node) {
     var self = this //当前animation实例
-    var commands = node.attr(Constant.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
+    var commands = node.attr(util.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
 
     //去掉;结尾导致数组多余的一个空值
     if (commands[commands.length - 1].trim() === '') {
@@ -566,10 +556,10 @@ define('brix/initAnimation',[
 
 define('brix/animation',[
   'jquery',
-  './extendCommand',
-  './initAnimation',
-  './constant'
-], function(jquery, extendCommand, initAnimation, Constant) {
+  './commands',
+  './parse',
+  './util'
+], function($, commands, parse, util) {
 
   /**
    * [Animation description]
@@ -597,17 +587,18 @@ define('brix/animation',[
     this._eventNamespace = '.' + (Math.random() + '').replace(/\D/g, '')
 
     //注册内建的命令
-    extendCommand(Animation)
+    commands(Animation)
 
     //所有的带bx-animation的节点
-    var allAnimNode = $(self.options.el).find('[' + Constant.BX_ANIMATION_HOOK + ']')
+    var allAnimNode = $(self.options.el).find('[' + util.BX_ANIMATION_HOOK + ']')
 
     //各节点进行动画绑定
     allAnimNode.each(function(i, node) {
       //解析bx-animation配置
-      initAnimation.call(self, Animation, $(node))
+      parse.call(self, Animation, $(node))
     })
   }
+
 
   /**
    * 注册自定义的命令

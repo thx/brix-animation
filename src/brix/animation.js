@@ -7,10 +7,10 @@
 
 define([
   'jquery',
-  './extendCommand',
-  './initAnimation',
-  './constant'
-], function(jquery, extendCommand, initAnimation, Constant) {
+  './commands',
+  './parse',
+  './util'
+], function($, commands, parse, util) {
 
   /**
    * [Animation description]
@@ -38,17 +38,18 @@ define([
     this._eventNamespace = '.' + (Math.random() + '').replace(/\D/g, '')
 
     //注册内建的命令
-    extendCommand(Animation)
+    commands(Animation)
 
     //所有的带bx-animation的节点
-    var allAnimNode = $(self.options.el).find('[' + Constant.BX_ANIMATION_HOOK + ']')
+    var allAnimNode = $(self.options.el).find('[' + util.BX_ANIMATION_HOOK + ']')
 
     //各节点进行动画绑定
     allAnimNode.each(function(i, node) {
       //解析bx-animation配置
-      initAnimation.call(self, Animation, $(node))
+      parse.call(self, Animation, $(node))
     })
   }
+
 
   /**
    * 注册自定义的命令

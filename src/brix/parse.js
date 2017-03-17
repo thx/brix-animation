@@ -5,8 +5,8 @@
  * @return {[type]}              [description]
  */
 define([
-  './constant'
-], function(Constant) {
+  './util'
+], function(util) {
 
   /**
    * 解析bx-animation配置，挨个执行命令
@@ -16,7 +16,7 @@ define([
    */
   function initAnimation(Animation, node) {
     var self = this //当前animation实例
-    var commands = node.attr(Constant.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
+    var commands = node.attr(util.BX_ANIMATION_HOOK).split(';'); //分号分隔每条命令
 
     //去掉;结尾导致数组多余的一个空值
     if (commands[commands.length - 1].trim() === '') {
