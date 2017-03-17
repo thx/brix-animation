@@ -24,7 +24,7 @@ define([
     Animation.extend('on', function(step) {
       var eventParse = step.param.split(',')
       var eventType = eventParse[0].trim()
-      // var eventMode = eventParse[1] && eventParse[1].trim() //1(默认)：重复点击事件直接重置动画；2：重复点击事件需等待动画结束；
+        // var eventMode = eventParse[1] && eventParse[1].trim() //1(默认)：重复点击事件直接重置动画；2：重复点击事件需等待动画结束；
       var node = step.node
       var done = step.done
       var index = step.index
@@ -164,40 +164,38 @@ define([
     })
 
 
-
     /**
      * 添加样式
+     * 一个class里不允许同时出现animation跟transition动画
+     * 请分两个class执行
+     * 动画结束回调只会执行一次
+     * -------
+     * className格式：class:className,[mode]
+     * 参数：
+     * className：样式名称
+     * mode：模式，
+     *   1-默认，添加完class在动画结束时移除它(通常是添加animation型动画时)，
+     *   2-添加完class动画结束后不移除该class(通常是添加transition型动画时),
+     *   3-添加不含动画的普通class
      */
-    //一个class里不允许同时出现animation跟transition动画
-    //请分两个class执行
-    //动画结束回调只会执行一次
     Animation.extend('class', function(step, event) {
       var param = step.param
       var node = step.node
       var done = step.done
       var eventNamespace = step.instance._eventNamespace
 
-        // var animIndex = node.animQueue.length - 1 //当前执行到节点的第几个动画下标
+      // var animIndex = node.animQueue.length - 1 //当前执行到节点的第几个动画下标
 
-      /**
-       * className格式：class:className,[mode]
-       * 参数：
-       * className：多个class空格隔开
-       * mode：模式，
-       *   1-默认，添加完class在动画结束时移除它(通常是添加animation型动画时)，
-       *   2-添加完class动画结束后不移除该class(通常是添加transition型动画时),
-       *   3-添加不含动画的普通class
-       */
       var className = param.split(',')[0].trim()
       var mode = (param.split(',')[1] || '1').trim()
 
       node.addClass(className)
         //
-      // if (node.addedClass) {
-      //   node.addedClass.push(className)
-      // } else {
-      //   node.addedClass = [className]
-      // }
+        // if (node.addedClass) {
+        //   node.addedClass.push(className)
+        // } else {
+        //   node.addedClass = [className]
+        // }
 
       node.off(util.animationEnd + eventNamespace) //防止重复添加事件
       node.off(util.transitionEnd + eventNamespace)
@@ -218,7 +216,7 @@ define([
 
           if (mode !== '2') { //mode=1或默认时动画结束移除class
             node.removeClass(className)
-            // node.addedClass.splice(node.addedClass.indexOf(className), 1)
+              // node.addedClass.splice(node.addedClass.indexOf(className), 1)
           }
           node.isAnimating = false
           done(event)
@@ -234,10 +232,15 @@ define([
 
     /**
      * 移除样式
-     * @param  {[type]} step
-     * @param  {[type]} event) {               }
-     * @return {[type]}
+     * -------
+     * className格式：removeClass:className,[mode]
+     * 参数：
+     * className：样式名称
+     * mode：模式，
+     *   1-默认，移除完class在动画结束时移除它(通常是添加animation型动画时)，
+     *   3-移除不含动画的普通class，直接done下一步
      */
+
     Animation.extend('removeClass', function(step, event) {
       var param = step.param
       var node = step.node
