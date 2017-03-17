@@ -2,7 +2,7 @@
  * 兼容性动画事件名
  * @return {[type]}    [description]
  */
-define('brix/util',[],function() {
+define('brix/animation/util',[],function() {
 
   // 兼容动画事件
   var transitionEnd = 'transitionend';
@@ -57,7 +57,7 @@ define('brix/util',[],function() {
  * @param  {[type]} render: function()    {                                var   self        [description]
  * @return {[type]}         [description]
  */
-define('brix/commands',[
+define('brix/animation/commands',[
   'jquery',
   './util'
 ], function($, util) {
@@ -423,7 +423,7 @@ define('brix/commands',[
  * @param  {[type]} Loader)      {               function initAnimation(node) {    var self [description]
  * @return {[type]}              [description]
  */
-define('brix/parse',[
+define('brix/animation/parse',[
   './util'
 ], function(util) {
 
@@ -556,9 +556,9 @@ define('brix/parse',[
 
 define('brix/animation',[
   'jquery',
-  './commands',
-  './parse',
-  './util'
+  './animation/commands',
+  './animation/parse',
+  './animation/util'
 ], function($, commands, parse, util) {
 
   /**

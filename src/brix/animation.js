@@ -7,9 +7,9 @@
 
 define([
   'jquery',
-  './commands',
-  './parse',
-  './util'
+  './animation/commands',
+  './animation/parse',
+  './animation/util'
 ], function($, commands, parse, util) {
 
   /**
